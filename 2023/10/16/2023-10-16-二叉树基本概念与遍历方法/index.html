@@ -18,12 +18,12 @@
   
   
   <title>二叉树基本定义以及遍历方法 | Liangshou</title>
-  <meta name="description" content="本文来自程序员Carl的 代码随想录。  [toc] 二叉树的基本定义二叉树的种类解题过程中二叉树有两种主要的形式：满二叉树和完全二叉树。 满二叉树满二叉树：如果一棵二叉树只有度为0的结点和度为2的结点，并且度为0的结点在同一层上，则这棵二叉树为满二叉树，如下图所示。  文章中使用了画图功能，使用方式参考 这篇文章， mermaid语法请参考 官方文档。  1234567891011121314">
+  <meta name="description" content="本文来自程序员Carl的 代码随想录。  [toc] 二叉树的基本定义二叉树的种类解题过程中二叉树有两种主要的形式：满二叉树和完全二叉树。 满二叉树满二叉树：如果一棵二叉树只有度为0的结点和度为2的结点，并且度为0的结点在同一层上，则这棵二叉树为满二叉树，如下图所示。  文章中使用了画图功能，使用方式参考 这篇文章， mermaid语法请参考 官方文档。  graph TD A--&gt;B A--&gt;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="二叉树基本定义以及遍历方法">
 <meta property="og:url" content="http://example.com/2023/10/16/2023-10-16-%E4%BA%8C%E5%8F%89%E6%A0%91%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%B8%8E%E9%81%8D%E5%8E%86%E6%96%B9%E6%B3%95/index.html">
 <meta property="og:site_name" content="Liangshou">
-<meta property="og:description" content="本文来自程序员Carl的 代码随想录。  [toc] 二叉树的基本定义二叉树的种类解题过程中二叉树有两种主要的形式：满二叉树和完全二叉树。 满二叉树满二叉树：如果一棵二叉树只有度为0的结点和度为2的结点，并且度为0的结点在同一层上，则这棵二叉树为满二叉树，如下图所示。  文章中使用了画图功能，使用方式参考 这篇文章， mermaid语法请参考 官方文档。  1234567891011121314">
+<meta property="og:description" content="本文来自程序员Carl的 代码随想录。  [toc] 二叉树的基本定义二叉树的种类解题过程中二叉树有两种主要的形式：满二叉树和完全二叉树。 满二叉树满二叉树：如果一棵二叉树只有度为0的结点和度为2的结点，并且度为0的结点在同一层上，则这棵二叉树为满二叉树，如下图所示。  文章中使用了画图功能，使用方式参考 这篇文章， mermaid语法请参考 官方文档。  graph TD A--&gt;B A--&gt;">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://code-thinking.cdn.bcebos.com/gifs/%E4%BA%8C%E5%8F%89%E6%A0%91%E5%89%8D%E5%BA%8F%E9%81%8D%E5%8E%86%EF%BC%88%E8%BF%AD%E4%BB%A3%E6%B3%95%EF%BC%89.gif">
 <meta property="og:image" content="https://code-thinking.cdn.bcebos.com/gifs/%E4%BA%8C%E5%8F%89%E6%A0%91%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86%EF%BC%88%E8%BF%AD%E4%BB%A3%E6%B3%95%EF%BC%89.gif">
@@ -365,6 +365,13 @@
 
 
         
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
 
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/10/16/2023-10-16-%E4%BA%8C%E5%8F%89%E6%A0%91%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%B8%8E%E9%81%8D%E5%8E%86%E6%96%B9%E6%B3%95/#comments" class="article-comment-link">评论</a></span>
         
@@ -381,17 +388,60 @@
 <blockquote>
 <p>文章中使用了画图功能，使用方式参考 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/172635547">这篇文章</a>， mermaid语法请参考 <a target="_blank" rel="noopener" href="https://mermaid.js.org/intro/">官方文档</a>。</p>
 </blockquote>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">A--&gt;B</span><br><span class="line">A--&gt;C</span><br><span class="line">B--&gt;D</span><br><span class="line">B--&gt;E</span><br><span class="line">C--&gt;F</span><br><span class="line">C--&gt;G</span><br><span class="line">D--&gt;H</span><br><span class="line">D--&gt;I</span><br><span class="line">E--&gt;J</span><br><span class="line">E--&gt;K</span><br><span class="line">F--&gt;L</span><br><span class="line">F--&gt;M</span><br><span class="line">G--&gt;N</span><br><span class="line">G--&gt;O</span><br></pre></td></tr></table></figure>
+<pre class="mermaid">graph TD
+A-->B
+A-->C
+B-->D
+B-->E
+C-->F
+C-->G
+D-->H
+D-->I
+E-->J
+E-->K
+F-->L
+F-->M
+G-->N
+G-->O</pre>
 
 
 
 <h3 id="完全二叉树"><a href="#完全二叉树" class="headerlink" title="完全二叉树"></a>完全二叉树</h3><p>完全二叉树的定义如下：在完全二叉树中，除了最底层节点可能没填满外，其余每层节点数都达到最大值，并且最下面一层的节点都集中在该层最左边的若干位置。若最底层为第 h 层（h从1开始），则该层包含 1~ 2^(h-1) 个节点。如下面的两个是完全二叉树：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">A--&gt;B</span><br><span class="line">A--&gt;C</span><br><span class="line">B--&gt;D</span><br><span class="line">B--&gt;E</span><br><span class="line">C--&gt;F</span><br><span class="line">C--&gt;G</span><br><span class="line">D--&gt;H</span><br><span class="line">D--&gt;I</span><br><span class="line">E--&gt;J</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre class="mermaid">graph TD
+A-->B
+A-->C
+B-->D
+B-->E
+C-->F
+C-->G
+D-->H
+D-->I
+E-->J</pre>
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">A--&gt;B</span><br><span class="line">A--&gt;C</span><br><span class="line">B--&gt;D</span><br><span class="line">B--&gt;E</span><br><span class="line">C--&gt;F</span><br><span class="line">C--&gt;G</span><br><span class="line">D--&gt;H</span><br><span class="line">D--&gt;I</span><br><span class="line">E--&gt;J</span><br><span class="line">E--&gt;K</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre class="mermaid">graph TD
+A-->B
+A-->C
+B-->D
+B-->E
+C-->F
+C-->G
+D-->H
+D-->I
+E-->J
+E-->K</pre>
 
 <p>而下面一个就不是完全二叉树：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">A--&gt;B</span><br><span class="line">A--&gt;C</span><br><span class="line">B--&gt;D</span><br><span class="line">B--&gt;E</span><br><span class="line">C--&gt;F</span><br><span class="line">C--&gt;G</span><br><span class="line">D--&gt;H</span><br><span class="line">D--&gt;I</span><br><span class="line">E--&gt;Null</span><br><span class="line">E--&gt;K</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre class="mermaid">graph TD
+A-->B
+A-->C
+B-->D
+B-->E
+C-->F
+C-->G
+D-->H
+D-->I
+E-->Null
+E-->K</pre>
 
 <blockquote>
 <p><strong>优先级队列其实是一个堆，堆就是一棵完全二叉树，同时保证父子节点的顺序关系</strong></p>
@@ -403,14 +453,34 @@
 <li>它的左、右子树也分别为二叉排序树</li>
 </ul>
 <p>例如下面这两棵树都是搜索树</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">10--&gt;6</span><br><span class="line">10--&gt;16</span><br><span class="line">6--&gt;3</span><br><span class="line">6--&gt;9</span><br><span class="line">16--&gt;14</span><br><span class="line">16--&gt;19</span><br></pre></td></tr></table></figure>
+<pre class="mermaid">graph TD
+10-->6
+10-->16
+6-->3
+6-->9
+16-->14
+16-->19</pre>
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">10--&gt;6</span><br><span class="line">10--&gt;Null</span><br><span class="line">6--&gt;3</span><br><span class="line">6--&gt;9</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre class="mermaid">graph TD
+10-->6
+10-->Null
+6-->3
+6-->9</pre>
 
 <h3 id="平衡二叉搜索树"><a href="#平衡二叉搜索树" class="headerlink" title="平衡二叉搜索树"></a>平衡二叉搜索树</h3><p>平衡二叉搜索树：又被称为AVL（Adelson-Velsky and Landis）树，且具有以下性质：它是一棵空树或它的左右两个子树的高度差的绝对值不超过1，并且左右两个子树都是一棵平衡二叉树。例如：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">10--&gt;6</span><br><span class="line">10--&gt;16</span><br><span class="line">6--&gt;3</span><br><span class="line">6--&gt;9</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre class="mermaid">graph TD
+10-->6
+10-->16
+6-->3
+6-->9</pre>
 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">10--&gt;6</span><br><span class="line">10--&gt;16</span><br><span class="line">6--&gt;3</span><br><span class="line">6--&gt;9</span><br><span class="line">16--&gt;14</span><br><span class="line">16--&gt;19</span><br></pre></td></tr></table></figure>
+<pre class="mermaid">graph TD
+10-->6
+10-->16
+6-->3
+6-->9
+16-->14
+16-->19</pre>
 
 <blockquote>
 <p><strong>C++中map、set、multimap，multiset的底层实现都是平衡二叉搜索树</strong>，所以map、set的增删操作时间时间复杂度是$log\ n$，</p>
@@ -421,7 +491,13 @@
 <p>顾名思义就是顺序存储的元素在内存是连续分布的，而链式存储则是通过指针把分布在各个地址的节点串联一起。</p>
 <p>链式存储比较直观，即给每个节点设置左指针和有指针，分别指向左子树和右子树。</p>
 <p>如何顺序存储呢？其实就是用数组来存储二叉树，顺序存储的方式如图：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">a--&gt;b</span><br><span class="line">a--&gt;c</span><br><span class="line">b--&gt;d</span><br><span class="line">b--&gt;e</span><br><span class="line">c--&gt;f</span><br><span class="line">c--&gt;g</span><br></pre></td></tr></table></figure>
+<pre class="mermaid">graph TD
+a-->b
+a-->c
+b-->d
+b-->e
+c-->f
+c-->g</pre>
 
 <p>对应的存储数组为：<code>[a,b,c,d,e,f,g]</code>，下标对应 0-6。</p>
 <p>顺序存储的遍历方式：</p>
@@ -463,7 +539,13 @@
 <li>中序（LDR）：dbeafcg</li>
 <li>后序（LRD）：debfgca</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">a--&gt;b</span><br><span class="line">a--&gt;c</span><br><span class="line">b--&gt;d</span><br><span class="line">b--&gt;e</span><br><span class="line">c--&gt;f</span><br><span class="line">c--&gt;g</span><br></pre></td></tr></table></figure>
+<pre class="mermaid">graph TD
+a-->b
+a-->c
+b-->d
+b-->e
+c-->f
+c-->g</pre>
 
 <p>最后是二叉树中深度优先和广度优先遍历实现方式，我们做二叉树相关题目，经常会使用递归的方式来实现深度优先遍历，也就是实现前中后序遍历，使用递归是比较方便的。</p>
 <p>前中后序遍历的逻辑其实都是可以借助栈使用递归的方式来实现的。</p>
@@ -692,6 +774,8 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
 
    
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
 
 
 
