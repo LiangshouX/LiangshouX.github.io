@@ -380,13 +380,13 @@
     <div class="article-entry marked-body" itemprop="articleBody">
       
         <blockquote>
-<p>本文来自程序员Carl的 <a target="_blank" rel="noopener" href="https://programmercarl.com/">代码随想录</a>。</p>
+<p>本文来自程序员Carl的 <a href="https://programmercarl.com/">代码随想录</a>。</p>
 </blockquote>
 <p>[toc]</p>
 <h1 id="二叉树的基本定义"><a href="#二叉树的基本定义" class="headerlink" title="二叉树的基本定义"></a>二叉树的基本定义</h1><h2 id="二叉树的种类"><a href="#二叉树的种类" class="headerlink" title="二叉树的种类"></a>二叉树的种类</h2><p>解题过程中二叉树有两种主要的形式：<strong>满二叉树</strong>和<strong>完全二叉树</strong>。</p>
 <h3 id="满二叉树"><a href="#满二叉树" class="headerlink" title="满二叉树"></a>满二叉树</h3><p>满二叉树：如果一棵二叉树只有度为0的结点和度为2的结点，并且度为0的结点在同一层上，则这棵二叉树为满二叉树，如下图所示。</p>
 <blockquote>
-<p>文章中使用了画图功能，使用方式参考 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/172635547">这篇文章</a>， mermaid语法请参考 <a target="_blank" rel="noopener" href="https://mermaid.js.org/intro/">官方文档</a>。</p>
+<p>文章中使用了画图功能，使用方式参考 <a href="https://zhuanlan.zhihu.com/p/172635547">这篇文章</a>， mermaid语法请参考 <a href="https://mermaid.js.org/intro/">官方文档</a>。</p>
 </blockquote>
 <pre class="mermaid">graph TD
 A-->B
@@ -565,7 +565,7 @@ c-->g</pre>
 <li><strong>确定单层递归的逻辑：</strong> 确定每一层递归需要处理的信息。在这里也就会重复调用自己来实现递归的过程。</li>
 </ol>
 <h2 id="题目链接及题解"><a href="#题目链接及题解" class="headerlink" title="题目链接及题解"></a>题目链接及题解</h2><ol>
-<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/binary-tree-preorder-traversal/">LC144_二叉树的前序遍历</a><ol>
+<li><a href="https://leetcode.cn/problems/binary-tree-preorder-traversal/">LC144_二叉树的前序遍历</a><ol>
 <li>确定递归函数的参数和返回值。预设代码给出了preorderTraversal函数，其参数为 TreeNode类型的root节点，返回List&lt;Integer&gt;类型。实现递归函数preorder，该函数主要实现对二叉树的遍历，并把遍历结果插入result向量中，返回值为void；参数需要两个：当前的结点和result向量</li>
 <li>确定终止条件：当前结点为 null 时递归终止</li>
 <li>单层递归逻辑：DLR</li>
@@ -575,7 +575,7 @@ c-->g</pre>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> List&lt;Integer&gt; <span class="title function_">preorderTraversal</span><span class="params">(TreeNode root)</span> &#123;</span><br><span class="line">        List&lt;Integer&gt; result = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">        preorder(root, result);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 确定参数：当前节点 和 result List</span></span><br><span class="line">    <span class="comment">// 返回值： void</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">preorder</span><span class="params">(TreeNode curr, List&lt;Integer&gt; result)</span>&#123;</span><br><span class="line">        <span class="comment">// 终止条件</span></span><br><span class="line">        <span class="keyword">if</span>(curr == <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 单层递归逻辑：DLR</span></span><br><span class="line">        result.add(curr.val);</span><br><span class="line">        preorder(curr.left, result);</span><br><span class="line">        preorder(curr.right, result);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <ol start="2">
-<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/binary-tree-postorder-traversal/">LC94_二叉树的中序遍历</a></li>
+<li><a href="https://leetcode.cn/problems/binary-tree-postorder-traversal/">LC94_二叉树的中序遍历</a></li>
 </ol>
 <blockquote>
 <p>原理&amp;思路同上一题</p>
@@ -583,19 +583,19 @@ c-->g</pre>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> List&lt;Integer&gt; <span class="title function_">postorderTraversal</span><span class="params">(TreeNode root)</span> &#123;</span><br><span class="line">        List&lt;Integer&gt; result = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">        postorder(root, result);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// LRD</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">postorder</span><span class="params">(TreeNode curr, List&lt;Integer&gt; result)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(curr == <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        postorder(curr.left, result);</span><br><span class="line">        postorder(curr.right, result);</span><br><span class="line">        result.add(curr.val);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <ol start="3">
-<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/binary-tree-inorder-traversal/">LC145_二叉树的后序遍历</a></li>
+<li><a href="https://leetcode.cn/problems/binary-tree-inorder-traversal/">LC145_二叉树的后序遍历</a></li>
 </ol>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> List&lt;Integer&gt; <span class="title function_">inorderTraversal</span><span class="params">(TreeNode root)</span> &#123;</span><br><span class="line">        List&lt;Integer&gt; result = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">        inorder(root, result);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">inorder</span><span class="params">(TreeNode curr, List&lt;Integer&gt; result)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(curr == <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        inorder(curr.left, result);</span><br><span class="line">        result.add(curr.val);</span><br><span class="line">        inorder(curr.right, result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
-<p><a target="_blank" rel="noopener" href="https://www.nowcoder.com/share/jump/8214310031697402552220">BM24 二叉树的中序遍历</a></p>
+<p><a href="https://www.nowcoder.com/share/jump/8214310031697402552220">BM24 二叉树的中序遍历</a></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 代码中的类名、方法名、参数名已经指定，请勿修改，直接返回方法规定的值即可</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * </span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> root TreeNode类 </span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> int整型一维数组</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span>[] inorderTraversal (TreeNode root) &#123;</span><br><span class="line">        List&lt;Integer&gt; result = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">        inorder(root, result);</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span>[] resultArr = result.stream().mapToInt(i -&gt; i).toArray();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> resultArr;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">inorder</span><span class="params">(TreeNode curr, List&lt;Integer&gt; result)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(curr == <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        inorder(curr.left, result);</span><br><span class="line">        result.add(curr.val);</span><br><span class="line">        inorder(curr.right, result);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><a target="_blank" rel="noopener" href="https://www.nowcoder.com/share/jump/8214310031697403236272">BM25 二叉树的后序遍历</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.nowcoder.com/share/jump/8214310031697403428551">BM23 二叉树的前序遍历</a></p>
+<p><a href="https://www.nowcoder.com/share/jump/8214310031697403236272">BM25 二叉树的后序遍历</a></p>
+<p><a href="https://www.nowcoder.com/share/jump/8214310031697403428551">BM23 二叉树的前序遍历</a></p>
 <h1 id="二叉树的迭代遍历"><a href="#二叉树的迭代遍历" class="headerlink" title="二叉树的迭代遍历"></a>二叉树的迭代遍历</h1><blockquote>
-<p>见 <a target="_blank" rel="noopener" href="https://programmercarl.com/">代码随想录</a>。</p>
+<p>见 <a href="https://programmercarl.com/">代码随想录</a>。</p>
 </blockquote>
 <p><strong>递归的实现就是：每一次递归调用都会把函数的局部变量、参数值和返回地址等压入调用栈中</strong>，然后递归返回的时候，从栈顶弹出上一次递归的各项参数，所以这就是递归为什么可以返回上一层位置的原因。可以用递归的一般都可以有等效的迭代的方法。</p>
 <h2 id="前序遍历（迭代法）"><a href="#前序遍历（迭代法）" class="headerlink" title="前序遍历（迭代法）"></a>前序遍历（迭代法）</h2><p>前序遍历是 DLR ，每次先处理的是中间节点，那么先将根节点放入栈中，然后将右孩子加入栈，再加入左孩子。</p>
@@ -731,6 +731,14 @@ c-->g</pre>
         
     </ul>
 
+    
+        <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+        <script>
+          if (window.mermaid) {
+            mermaid.initialize({theme: 'forest'});
+          }
+        </script>
+    
     <div class="copyright">
     	
         <div class="publishby">
