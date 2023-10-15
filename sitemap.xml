@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://example.com/2023/10/15/%E6%90%AD%E5%BB%BAGitHub%E4%B8%BB%E9%A1%B5-hexo%E7%AF%87/</loc>
+    <loc>http://example.com/2023/10/13/%E6%90%AD%E5%BB%BAGitHub%E4%B8%BB%E9%A1%B5-jekyll%E7%AF%87/</loc>
     
     <lastmod>2023-10-15</lastmod>
     
@@ -47,7 +47,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/categories/index.html</loc>
+    <loc>http://example.com/links/index.html</loc>
     
     <lastmod>2022-03-21</lastmod>
     
@@ -56,7 +56,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/links/index.html</loc>
+    <loc>http://example.com/categories/index.html</loc>
     
     <lastmod>2022-03-21</lastmod>
     
@@ -91,6 +91,27 @@
   </url>
 
   
+  <url>
+    <loc>http://example.com/tags/Github/</loc>
+    <lastmod>2023-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/tags/HTML/</loc>
+    <lastmod>2023-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
 
+  
+  <url>
+    <loc>http://example.com/categories/GitHub/</loc>
+    <lastmod>2023-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
   
 </urlset>
