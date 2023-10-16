@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-10-16T05:12:04.799Z</updated>
+  <updated>2023-10-16T10:26:14.933Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -17,15 +17,31 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title></title>
+    <title>Java中的栈与队列</title>
     <link href="http://example.com/2023/10/16/2023-10-16-Java%E4%B8%AD%E7%9A%84%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/"/>
     <id>http://example.com/2023/10/16/2023-10-16-Java%E4%B8%AD%E7%9A%84%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97/</id>
     <published>2023-10-16T05:12:04.799Z</published>
-    <updated>2023-10-16T05:12:04.799Z</updated>
+    <updated>2023-10-16T10:26:14.933Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>关于栈与队列的基础知识点本文不再赘述，可参考 <a href="http://data.biancheng.net/view/169.html">编程帮-栈</a>、<a href="http://data.biancheng.net/view/300.html">编程帮-队列</a>。</p></blockquote><h1 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h1><h2 id="标准库实现"><a href="#标准库实现" class="headerlink" title="标准库实现"></a>标准库实现</h2><p>在 <code>java.util</code> 中封装了 Stack 类，其继承自Vector类，定义了push、pop、peek、empty、search五个操作对Vector进行了扩展，JDK源码（已省去jdoc）如下：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Stack</span>&lt;E&gt; <span class="keyword">extends</span> <span class="title class_">Vector</span>&lt;E&gt; &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Stack</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">public</span> E <span class="title function_">push</span><span class="params">(E item)</span> &#123;</span><br><span class="line">        addElement(item);</span><br><span class="line">        <span class="keyword">return</span> item;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">synchronized</span> E <span class="title function_">pop</span><span class="params">()</span> &#123;</span><br><span class="line">        E       obj;</span><br><span class="line">        <span class="type">int</span>     <span class="variable">len</span> <span class="operator">=</span> size();</span><br><span class="line"></span><br><span class="line">        obj = peek();</span><br><span class="line">        removeElementAt(len - <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> obj;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">synchronized</span> E <span class="title function_">peek</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">int</span>     <span class="variable">len</span> <span class="operator">=</span> size();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (len == <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">EmptyStackException</span>();</span><br><span class="line">        <span class="keyword">return</span> elementAt(len - <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">empty</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> size() == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="type">int</span> <span class="title function_">search</span><span class="params">(Object o)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> lastIndexOf(o);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (i &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> size() - i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** use serialVersionUID from JDK 1.0.2 for interoperability */</span></span><br><span class="line">    <span class="meta">@java</span>.io.Serial</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">serialVersionUID</span> <span class="operator">=</span> <span class="number">1224463164541339165L</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;关于栈与队列的基础知识点本文不再赘述，可参考 &lt;a href=&quot;http://data.biancheng.net/view/169.html&quot;&gt;编程帮-栈&lt;/a&gt;、&lt;a href=&quot;http://data.biancheng.net/view/3</summary>
+      
     
     
     
+    <category term="Java基础实践" scheme="http://example.com/categories/Java%E5%9F%BA%E7%A1%80%E5%AE%9E%E8%B7%B5/"/>
     
+    
+    <category term="Java" scheme="http://example.com/tags/Java/"/>
+    
+    <category term="栈" scheme="http://example.com/tags/%E6%A0%88/"/>
+    
+    <category term="数据结构与算法" scheme="http://example.com/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/"/>
     
   </entry>
   
@@ -82,13 +98,13 @@
     <category term="刷题笔记" scheme="http://example.com/categories/%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0/"/>
     
     
+    <category term="数据结构与算法" scheme="http://example.com/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/"/>
+    
     <category term="LeetCode" scheme="http://example.com/tags/LeetCode/"/>
     
     <category term="NowCoder" scheme="http://example.com/tags/NowCoder/"/>
     
     <category term="二叉树" scheme="http://example.com/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/"/>
-    
-    <category term="数据结构与算法" scheme="http://example.com/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/"/>
     
   </entry>
   
