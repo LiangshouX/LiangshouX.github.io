@@ -17,19 +17,27 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>Java抽象类与接口 | Liangshou</title>
-  <meta property="og:type" content="article">
-<meta property="og:title" content="Java抽象类与接口">
-<meta property="og:url" content="http://example.com/2023/10/19/2023-10-19-Java%E6%8A%BD%E8%B1%A1%E7%B1%BB%E4%B8%8E%E6%8E%A5%E5%8F%A3/index.html">
+  <title>Java 常识？我咋不知道 | Liangshou</title>
+  <meta name="description" content="Java SE，Java EE &amp; Java ME？  有没有想过，同样是Java，会不会存在不同的版本 or anything else？事实上，为了使软件开发人员、服务提供商和设备生产商可以针对特定的市场进行开发，SUN公司将Java划分为三个技术平台：  Java SE：Standard Edition（标准版） Java EE：Enterprise Edition（商业版） Jav">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 常识？我咋不知道">
+<meta property="og:url" content="http://example.com/2023/10/19/2023-10-19-%E6%88%91%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84Java%E5%B8%B8%E8%AF%86/index.html">
 <meta property="og:site_name" content="Liangshou">
+<meta property="og:description" content="Java SE，Java EE &amp; Java ME？  有没有想过，同样是Java，会不会存在不同的版本 or anything else？事实上，为了使软件开发人员、服务提供商和设备生产商可以针对特定的市场进行开发，SUN公司将Java划分为三个技术平台：  Java SE：Standard Edition（标准版） Java EE：Enterprise Edition（商业版） Jav">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://typora-1308640872.cos.ap-beijing.myqcloud.com/img/Java%E6%8A%80%E6%9C%AF%E5%B9%B3%E5%8F%B0%E5%85%B3%E7%B3%BB%E5%9B%BE.png">
+<meta property="og:image" content="https://typora-1308640872.cos.ap-beijing.myqcloud.com/img/jdk&jvm.png">
+<meta property="og:image" content="https://typora-1308640872.cos.ap-beijing.myqcloud.com/img/java8-conceptual-design.jpg">
+<meta property="og:image" content="https://typora-1308640872.cos.ap-beijing.myqcloud.com/img/Java%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E8%BF%90%E8%A1%8C%E8%BF%87%E7%A8%8B.png">
+<meta property="og:image" content="https://typora-1308640872.cos.ap-beijing.myqcloud.com/img/jit-vs-aot.png">
 <meta property="article:published_time" content="2023-10-19T15:51:41.429Z">
-<meta property="article:modified_time" content="2023-10-19T15:51:41.429Z">
+<meta property="article:modified_time" content="2023-10-20T08:52:13.024Z">
 <meta property="article:author" content="Liangshou">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://typora-1308640872.cos.ap-beijing.myqcloud.com/img/Java%E6%8A%80%E6%9C%AF%E5%B9%B3%E5%8F%B0%E5%85%B3%E7%B3%BB%E5%9B%BE.png">
   <!-- Canonical links -->
-  <link rel="canonical" href="http://example.com/2023/10/19/2023-10-19-Java%E6%8A%BD%E8%B1%A1%E7%B1%BB%E4%B8%8E%E6%8E%A5%E5%8F%A3/index.html">
+  <link rel="canonical" href="http://example.com/2023/10/19/2023-10-19-%E6%88%91%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84Java%E5%B8%B8%E8%AF%86/index.html">
   
     <link rel="alternate" href="/atom.xml" title="Liangshou" type="application/atom+xml">
   
@@ -215,7 +223,7 @@
   <div class="widget">
     <h3 class="widget-title">分类</h3>
     <div class="widget-body">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/GitHub/">GitHub</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java%E5%9F%BA%E7%A1%80%E5%AE%9E%E8%B7%B5/">Java基础实践</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java%E6%89%8B%E8%B4%A6%E6%9C%AC/">Java手账本</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0/">刷题日记</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E6%9C%BABUG/">随机BUG</a><span class="category-list-count">1</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java%E6%89%8B%E8%B4%A6%E6%9C%AC/">Java手账本</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0/">刷题日记</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B7%A5%E5%85%B7%E5%BA%93/">工具库</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E6%9C%BABUG/">随机BUG</a><span class="category-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -260,10 +268,10 @@
             
             <div class="item-inner">
               <p class="item-category">
-                <a class="category-link" href="/categories/Java%E5%9F%BA%E7%A1%80%E5%AE%9E%E8%B7%B5/">Java基础实践</a>
+                <a class="category-link" href="/categories/Java%E6%89%8B%E8%B4%A6%E6%9C%AC/">Java手账本</a>
               </p>
               <p class="item-title">
-                <a href="/2023/10/19/2023-10-19-Java%E6%8A%BD%E8%B1%A1%E7%B1%BB%E4%B8%8E%E6%8E%A5%E5%8F%A3/" class="title">Java抽象类与接口</a>
+                <a href="/2023/10/19/2023-10-19-%E6%88%91%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84Java%E5%B8%B8%E8%AF%86/" class="title">Java 常识？我咋不知道</a>
               </p>
               <p class="item-date">
                 <time datetime="2023-10-19T15:51:41.429Z" itemprop="datePublished">2023-10-19</time>
@@ -346,21 +354,21 @@
   <div class="slimContent">
     <nav id="toc" class="article-toc">
       <h3 class="toc-title">文章目录</h3>
-      
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Java-SE%EF%BC%8CJava-EE-Java-ME%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">Java SE，Java EE &amp; Java ME？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-SE"><span class="toc-number">1.1.</span> <span class="toc-text">Java SE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-EE"><span class="toc-number">1.2.</span> <span class="toc-text">Java EE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-ME"><span class="toc-number">1.3.</span> <span class="toc-text">Java ME</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JDK%EF%BC%8CJVM-JRE%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">JDK，JVM &amp; JRE？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#JVM-JIT"><span class="toc-number">2.1.</span> <span class="toc-text">JVM &amp; JIT</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JDK-JRE"><span class="toc-number">2.2.</span> <span class="toc-text">JDK &amp; JRE</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BC%96%E8%AF%91%E4%B8%8E%E8%A7%A3%E9%87%8A%E5%B9%B6%E5%AD%98%EF%BC%9F"><span class="toc-number">3.</span> <span class="toc-text">编译与解释并存？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#AOT-JIT%EF%BC%9F"><span class="toc-number">4.</span> <span class="toc-text">AOT &amp; JIT？</span></a></li></ol>
     </nav>
   </div>
 </aside>
 
 <main class="main" role="main">
   <div class="content">
-  <article id="post-2023-10-19-Java抽象类与接口" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <article id="post-2023-10-19-我不知道的Java常识" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
     <div class="article-header">
       
         
   
     <h1 class="article-title" itemprop="name">
-      Java抽象类与接口
+      Java 常识？我咋不知道
     </h1>
   
 
@@ -368,14 +376,14 @@
       <div class="article-meta">
         <span class="article-date">
     <i class="icon icon-calendar-check"></i>
-	<a href="/2023/10/19/2023-10-19-Java%E6%8A%BD%E8%B1%A1%E7%B1%BB%E4%B8%8E%E6%8E%A5%E5%8F%A3/" class="article-date">
+	<a href="/2023/10/19/2023-10-19-%E6%88%91%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84Java%E5%B8%B8%E8%AF%86/" class="article-date">
 	  <time datetime="2023-10-19T15:51:41.429Z" itemprop="datePublished">2023-10-19</time>
 	</a>
 </span>
         
   <span class="article-category">
     <i class="icon icon-folder"></i>
-    <a class="article-category-link" href="/categories/Java%E5%9F%BA%E7%A1%80%E5%AE%9E%E8%B7%B5/">Java基础实践</a>
+    <a class="article-category-link" href="/categories/Java%E6%89%8B%E8%B4%A6%E6%9C%AC/">Java手账本</a>
   </span>
 
         
@@ -394,13 +402,76 @@
 	</span>
 
 
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/10/19/2023-10-19-Java%E6%8A%BD%E8%B1%A1%E7%B1%BB%E4%B8%8E%E6%8E%A5%E5%8F%A3/#comments" class="article-comment-link">评论</a></span>
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/10/19/2023-10-19-%E6%88%91%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84Java%E5%B8%B8%E8%AF%86/#comments" class="article-comment-link">评论</a></span>
         
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        
+        <h1 id="Java-SE，Java-EE-Java-ME？"><a href="#Java-SE，Java-EE-Java-ME？" class="headerlink" title="Java SE，Java EE &amp; Java ME？"></a>Java SE，Java EE &amp; Java ME？</h1><img src="https://typora-1308640872.cos.ap-beijing.myqcloud.com/img/Java技术平台关系图.png" alt="Java技术平台关系图" style="zoom:67%;" />
+
+<p>有没有想过，同样是Java，会不会存在不同的版本 or anything else？事实上，为了使软件开发人员、服务提供商和设备生产商可以针对特定的市场进行开发，SUN公司将Java划分为三个技术平台：</p>
+<ul>
+<li>Java SE：Standard Edition（标准版）</li>
+<li>Java EE：Enterprise Edition（商业版）</li>
+<li>Java ME：Micro Edition（小型版）</li>
+</ul>
+<h2 id="Java-SE"><a href="#Java-SE" class="headerlink" title="Java SE"></a>Java SE</h2><p>全称为Java Platform Standard Edition，这是Java 平台标准版，包含标准的 JVM和标准库，更具体地说，包括了 Java 核心的类库，如集合、IO、数据库连接以及网络编程等。</p>
+<p>JavaSE 是Java 编程语言的基础，三个核心平台中的核心部分，Java EE 和 Java ME 都是从 JavaSE的基础上发展而来的 </p>
+<p>JavaSE是为开发<strong>普通桌面</strong>和<strong>商务应用程序</strong>提供的解决方案。</p>
+<h2 id="Java-EE"><a href="#Java-EE" class="headerlink" title="Java EE"></a>Java EE</h2><p>全称是 Java Platform Enterprise Edition，Java 平台企业版，建立在 Java SE 的基础上，并加入了大量的 API 和库，包含了支持企业级应用程序开发和部署的标准和规范（比如 Servlet、JSP、EJB、JDBC、JPA、JTA、JavaMail、JMS）。</p>
+<p>Java EE是进一步学习Web应用所必须的，Spring等框架都是Java EE开源生态系统的一部分。</p>
+<p>JavaEE 是为开发<strong>企业级应用程序</strong>提供的解决方案。 </p>
+<h2 id="Java-ME"><a href="#Java-ME" class="headerlink" title="Java ME"></a>Java ME</h2><p>全称是 Java Platform Micro Edition，Java平台小型版，是一个针对 <strong>嵌入式设备</strong> 的 “瘦身版”，要用于小型数字电子设备上软件程序的开发，例如家用电器的智能化、联网功能等。</p>
+<p>此外，JavaME提供了HTTP等高级Internet协议，使移动电话能以Client&#x2F; Server方式直接访问 Internet的全部信息，提供最效率的无线交流。</p>
+<p>JavaME 是为开发电子消费产品和嵌入式设备提供的解决方案。然而Java ME从来没有真正流行起来，反而是Android开发成为了移动平台的标准之一，只需要了解即可。</p>
+<h1 id="JDK，JVM-JRE？"><a href="#JDK，JVM-JRE？" class="headerlink" title="JDK，JVM &amp; JRE？"></a>JDK，JVM &amp; JRE？</h1><blockquote>
+<p>Java文档官网：<a href="https://docs.oracle.com/en/java/index.html">https://docs.oracle.com/en/java/index.html</a></p>
+</blockquote>
+<p>立即推(张宇老师口吻)：这题我会！事实上，这个问题倒是比较容易理解。</p>
+<img src="https://typora-1308640872.cos.ap-beijing.myqcloud.com/img/jdk&jvm.png" alt="jdk&jvm" style="zoom:67%;" />
+
+<blockquote>
+<p>详细信息可参考：<a href="https://www.oracle.com/java/technologies/platform-glance.html">官方架构图</a>。</p>
+<p><img src="https://typora-1308640872.cos.ap-beijing.myqcloud.com/img/java8-conceptual-design.jpg" alt="img"></p>
+</blockquote>
+<h2 id="JVM-JIT"><a href="#JVM-JIT" class="headerlink" title="JVM &amp; JIT"></a>JVM &amp; JIT</h2><p>JVM 即 Java 虚拟机，是运⾏ Java 字节码的虚拟机。JVM 有针对不同系统的特定实现（Windows，Linux，macOS），⽬的是使⽤相同的字节码，它们都会给出相同的结果。</p>
+<blockquote>
+<p>在 Java 中，JVM 可以理解的代码就叫做 字节码 （即扩展名为 .class 的⽂件），它不⾯向任何特定的处理器，只⾯向虚拟机。Java 语⾔通过字节码的⽅式，在⼀定程度上解决了传统解释型语⾔执⾏效率低的问题，同时⼜保留了解释型语⾔可移植的特点。所以 Java 程序运⾏时⽐较⾼效</p>
+<p>⽽且，由于字节码并不针对⼀种特定的机器，因此，Java 程序⽆须重新编译便可在多种不同操作系统的计算机上运⾏。</p>
+</blockquote>
+<p>Java 程序从源代码到编译运⾏⼀般需要经历以下的过程：</p>
+<p><img src="https://typora-1308640872.cos.ap-beijing.myqcloud.com/img/Java%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E8%BF%90%E8%A1%8C%E8%BF%87%E7%A8%8B.png" alt="Java源码编译运行过程"></p>
+<blockquote>
+<p>事实上，可以运行在 Java 虚拟机上的语言除了 Java外还有很多，如Groovy(.groovy)、Kotlin(.kt)、JRuby(.rb)、Clojure(.clj)等，它们编译运行的过程大致相似，经过对应的编译器编译为 .class字节码文件。</p>
+</blockquote>
+<p>这里需要格外注意的是 <code>.class --&gt; 机器码</code> 这⼀步。在这⼀步 JVM 类加载器⾸先加载字节码⽂件，然后通过 <strong>解释器</strong> 逐⾏解释执⾏，这种⽅式的执⾏速度会相对⽐较慢。⽽且，有些⽅法和代码块是经常需要被调⽤的(也就是所谓的热点代码)，所以后⾯引进了 JIT （Just in Time Compilation）编译器，⽽ JIT 属于运⾏时编译。当 JIT 编译器完成第⼀次编译后，其会将字节码对应的机器码保存下来，下次可以直接使⽤。⽽我们知道，机器码的运⾏效率肯定是⾼于 Java 解释器的。这也解释了我们为什么经常会说 Java 是编译与解释共存的语言。</p>
+<p>于是引入 JIT 后，程序从源代码到编译运⾏经历的过程具体为：</p>
+<p>![Java源码编译运行过程 (1)](<a href="https://typora-1308640872.cos.ap-beijing.myqcloud.com/img/Java%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E8%BF%90%E8%A1%8C%E8%BF%87%E7%A8%8B">https://typora-1308640872.cos.ap-beijing.myqcloud.com/img/Java源码编译运行过程</a> (1).png)</p>
+<h2 id="JDK-JRE"><a href="#JDK-JRE" class="headerlink" title="JDK &amp; JRE"></a>JDK &amp; JRE</h2><p>JDK 是 Java Development Kit，它是功能⻬全的 Java SDK。它拥有 JRE 所拥有的⼀切，还有编译器（javac）和⼯具（如 javadoc 和 jdb）。它能够创建和编译程序。</p>
+<p>JRE 是 Java 运⾏时环境。它是运⾏已编译 Java 程序所需的所有内容的集合，包括 Java 虚拟机（JVM），Java 类库，java 命令和其他的⼀些基础构件。但是，它不能⽤于创建新程序。</p>
+<p>如果只是为了运⾏⼀下 Java 程序的话，只需要安装 JRE 就可以了。如果需要进⾏⼀些Java 编程⽅⾯的⼯作，那么就需要安装 JDK 了。</p>
+<blockquote>
+<p>这也不是绝对的。有时，即使不打算在计算机上进⾏任何 Java 开发，仍然需要安装 JDK。例如，如果要使⽤ JSP 部署 Web 应⽤程序，那么从技术上讲，只是在应⽤程序服务器中运⾏ Java 程序。</p>
+<p>但是因为应⽤程序服务器会将 JSP 转换为 Java servlet，并且需要使⽤ JDK 来编译 servlet，还是需要安装JDK</p>
+</blockquote>
+<h1 id="编译与解释并存？"><a href="#编译与解释并存？" class="headerlink" title="编译与解释并存？"></a>编译与解释并存？</h1><p>参考JVM部分，可知 Java 语言既具有编译型语言的特征，也具有解释型语言的特征。因为 Java 程序要经过先编译，后解释两个步骤，由 Java 编写的程序需要先经过编译步骤，生成字节码（<code>.class</code> 文件），这种字节码必须由 Java 解释器来解释执行。</p>
+<h1 id="AOT-JIT？"><a href="#AOT-JIT？" class="headerlink" title="AOT &amp; JIT？"></a>AOT &amp; JIT？</h1><blockquote>
+<p>可参考：<a href="https://www.modb.pro/db/190497">理解Java的JIT和AOT</a>，<a href="https://juejin.cn/post/7184712312983388217#heading-0">JIT v.s. AOT in Java</a>。</p>
+<p><img src="https://typora-1308640872.cos.ap-beijing.myqcloud.com/img/jit-vs-aot.png" alt="jit-vs-aot"> </p>
+</blockquote>
+<p>JIT是Just-In-Time的首字母缩写，指程序<strong>运行期间</strong>发生的编译行为。</p>
+<ul>
+<li>JIT多伴随解释器，因为解释型语言是按行解释执行，JIT将“常用”功能编译为机器码，需要时直接执行，减少解释时间；</li>
+<li><em>例如：Python(pypy)，新版Javascript、Ruby、Php解释器；</em></li>
+</ul>
+<p>AOT是Ahead-Of-Time的首字母缩写，指程序<strong>运行之前</strong>发生的编译行为。</p>
+<ul>
+<li>对于编译型语言，AOT啥也不是，本身就是先编译后执行，但对于解释型语言，AOT提前“预见”热点功能，并编译为机器码，同样减少解释时间；</li>
+<li><em>例如：C，C++，Rust，Go，Java AOT；</em></li>
+</ul>
+<p>AOP是JDK 9 引入了一种新的编译模式，主要优势在于启动时间、内存占用和打包体积。JIT 的主要优势在于具备更高的极限处理能力，可以降低请求的最大延迟。</p>
+
       
     </div>
     <div class="article-footer">

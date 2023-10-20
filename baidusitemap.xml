@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://example.com/2023/10/19/2023-10-19-%E6%88%91%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84Java%E5%B8%B8%E8%AF%86/</loc>
+    <lastmod>2023-10-20</lastmod>
+  </url>
+  <url>
+    <loc>http://example.com/2023/10/13/2023-10-13-%E6%90%AD%E5%BB%BAGitHub%E4%B8%BB%E9%A1%B5-jekyll%E7%AF%87/</loc>
+    <lastmod>2023-10-20</lastmod>
+  </url>
+  <url>
     <loc>http://example.com/2023/10/16/2023-10-16-%E4%BA%8C%E5%8F%89%E6%A0%91%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%B8%8E%E9%81%8D%E5%8E%86%E6%96%B9%E6%B3%95/</loc>
     <lastmod>2023-10-20</lastmod>
   </url>
@@ -13,19 +21,11 @@
     <lastmod>2023-10-20</lastmod>
   </url>
   <url>
-    <loc>http://example.com/2023/10/19/2023-10-19-Java%E6%8A%BD%E8%B1%A1%E7%B1%BB%E4%B8%8E%E6%8E%A5%E5%8F%A3/</loc>
-    <lastmod>2023-10-19</lastmod>
-  </url>
-  <url>
     <loc>http://example.com/2023/10/17/2023-10-17-MySQL%E5%9F%BA%E7%A1%80/</loc>
     <lastmod>2023-10-17</lastmod>
   </url>
   <url>
     <loc>http://example.com/2023/10/16/2023-10-16-hexo%E9%83%A8%E7%BD%B2%E7%9A%84%E9%A1%B5%E9%9D%A2%E4%B8%8D%E6%94%AF%E6%8C%81mermaid%E8%AF%AD%E6%B3%95/</loc>
-    <lastmod>2023-10-15</lastmod>
-  </url>
-  <url>
-    <loc>http://example.com/2023/10/13/2023-10-13-%E6%90%AD%E5%BB%BAGitHub%E4%B8%BB%E9%A1%B5-jekyll%E7%AF%87/</loc>
     <lastmod>2023-10-15</lastmod>
   </url>
   <url>
