@@ -29,9 +29,10 @@
 <meta property="og:image" content="https://typora-1308640872.cos.ap-beijing.myqcloud.com/img/jdk&jvm.png">
 <meta property="og:image" content="https://typora-1308640872.cos.ap-beijing.myqcloud.com/img/java8-conceptual-design.jpg">
 <meta property="og:image" content="https://typora-1308640872.cos.ap-beijing.myqcloud.com/img/Java%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E8%BF%90%E8%A1%8C%E8%BF%87%E7%A8%8B.png">
+<meta property="og:image" content="https://typora-1308640872.cos.ap-beijing.myqcloud.com/img/Java%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E8%BF%90%E8%A1%8C%E8%BF%87%E7%A8%8B-JIT.png">
 <meta property="og:image" content="https://typora-1308640872.cos.ap-beijing.myqcloud.com/img/jit-vs-aot.png">
 <meta property="article:published_time" content="2023-10-19T15:51:41.429Z">
-<meta property="article:modified_time" content="2023-10-20T08:52:13.024Z">
+<meta property="article:modified_time" content="2023-10-20T08:56:14.096Z">
 <meta property="article:author" content="Liangshou">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -447,7 +448,7 @@
 </blockquote>
 <p>这里需要格外注意的是 <code>.class --&gt; 机器码</code> 这⼀步。在这⼀步 JVM 类加载器⾸先加载字节码⽂件，然后通过 <strong>解释器</strong> 逐⾏解释执⾏，这种⽅式的执⾏速度会相对⽐较慢。⽽且，有些⽅法和代码块是经常需要被调⽤的(也就是所谓的热点代码)，所以后⾯引进了 JIT （Just in Time Compilation）编译器，⽽ JIT 属于运⾏时编译。当 JIT 编译器完成第⼀次编译后，其会将字节码对应的机器码保存下来，下次可以直接使⽤。⽽我们知道，机器码的运⾏效率肯定是⾼于 Java 解释器的。这也解释了我们为什么经常会说 Java 是编译与解释共存的语言。</p>
 <p>于是引入 JIT 后，程序从源代码到编译运⾏经历的过程具体为：</p>
-<p>![Java源码编译运行过程 (1)](<a href="https://typora-1308640872.cos.ap-beijing.myqcloud.com/img/Java%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E8%BF%90%E8%A1%8C%E8%BF%87%E7%A8%8B">https://typora-1308640872.cos.ap-beijing.myqcloud.com/img/Java源码编译运行过程</a> (1).png)</p>
+<p><img src="https://typora-1308640872.cos.ap-beijing.myqcloud.com/img/Java%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E8%BF%90%E8%A1%8C%E8%BF%87%E7%A8%8B-JIT.png" alt="Java源码编译运行过程-JIT"></p>
 <h2 id="JDK-JRE"><a href="#JDK-JRE" class="headerlink" title="JDK &amp; JRE"></a>JDK &amp; JRE</h2><p>JDK 是 Java Development Kit，它是功能⻬全的 Java SDK。它拥有 JRE 所拥有的⼀切，还有编译器（javac）和⼯具（如 javadoc 和 jdb）。它能够创建和编译程序。</p>
 <p>JRE 是 Java 运⾏时环境。它是运⾏已编译 Java 程序所需的所有内容的集合，包括 Java 虚拟机（JVM），Java 类库，java 命令和其他的⼀些基础构件。但是，它不能⽤于创建新程序。</p>
 <p>如果只是为了运⾏⼀下 Java 程序的话，只需要安装 JRE 就可以了。如果需要进⾏⼀些Java 编程⽅⾯的⼯作，那么就需要安装 JDK 了。</p>
