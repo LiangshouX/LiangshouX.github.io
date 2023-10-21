@@ -2,9 +2,9 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://example.com/2023/10/20/2023-10-20-%E5%85%B3%E4%BA%8EJava%E9%9B%86%E5%90%88/</loc>
+    <loc>http://example.com/2023/10/20/2023-10-20-%E7%90%86%E6%B8%85%20Java%20%E5%AE%B9%E5%99%A8%EF%BC%88%E9%9B%86%E5%90%88%EF%BC%89/</loc>
     
-    <lastmod>2023-10-20</lastmod>
+    <lastmod>2023-10-21</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -101,7 +101,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/404.html</loc>
+    <loc>http://example.com/books/index.html</loc>
     
     <lastmod>2022-03-21</lastmod>
     
@@ -110,7 +110,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/books/index.html</loc>
+    <loc>http://example.com/404.html</loc>
     
     <lastmod>2022-03-21</lastmod>
     
@@ -178,20 +178,6 @@
   </url>
   
   <url>
-    <loc>http://example.com/tags/hexo/</loc>
-    <lastmod>2023-10-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://example.com/tags/mermaid/</loc>
-    <lastmod>2023-10-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>http://example.com/tags/Java/</loc>
     <lastmod>2023-10-21</lastmod>
     <changefreq>weekly</changefreq>
@@ -207,6 +193,20 @@
   
   <url>
     <loc>http://example.com/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/</loc>
+    <lastmod>2023-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/tags/hexo/</loc>
+    <lastmod>2023-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/tags/mermaid/</loc>
     <lastmod>2023-10-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -278,14 +278,14 @@
   </url>
   
   <url>
-    <loc>http://example.com/categories/%E9%9A%8F%E6%9C%BABUG/</loc>
+    <loc>http://example.com/categories/Java%E6%89%8B%E8%B4%A6%E6%9C%AC/</loc>
     <lastmod>2023-10-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://example.com/categories/Java%E6%89%8B%E8%B4%A6%E6%9C%AC/</loc>
+    <loc>http://example.com/categories/%E9%9A%8F%E6%9C%BABUG/</loc>
     <lastmod>2023-10-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
