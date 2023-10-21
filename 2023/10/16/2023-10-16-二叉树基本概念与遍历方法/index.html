@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>二叉树基本定义以及遍历方法 | Liangshou</title>
+  <meta name="description" content="本文来自程序员Carl的 代码随想录。  [toc] 二叉树的基本定义 二叉树的种类 解题过程中二叉树有两种主要的形式：满二叉树和完全二叉树。 满二叉树 满二叉树：如果一棵二叉树只有度为0的结点和度为2的结点，并且度为0的结点在同一层上，则这棵二叉树为满二叉树，如下图所示。  文章中使用了画图功能，使用方式参考 这篇文章， mermaid语法请参考 官方文档。  graph TD A--&gt;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="二叉树基本定义以及遍历方法">
+<meta property="og:url" content="http://example.com/2023/10/16/2023-10-16-%E4%BA%8C%E5%8F%89%E6%A0%91%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%B8%8E%E9%81%8D%E5%8E%86%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:site_name" content="Liangshou">
+<meta property="og:description" content="本文来自程序员Carl的 代码随想录。  [toc] 二叉树的基本定义 二叉树的种类 解题过程中二叉树有两种主要的形式：满二叉树和完全二叉树。 满二叉树 满二叉树：如果一棵二叉树只有度为0的结点和度为2的结点，并且度为0的结点在同一层上，则这棵二叉树为满二叉树，如下图所示。  文章中使用了画图功能，使用方式参考 这篇文章， mermaid语法请参考 官方文档。  graph TD A--&gt;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://code-thinking.cdn.bcebos.com/gifs/102%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86.gif">
+<meta property="article:published_time" content="2023-10-15T16:52:39.418Z">
+<meta property="article:modified_time" content="2023-10-20T06:44:51.934Z">
+<meta property="article:author" content="Liangshou">
+<meta property="article:tag" content="数据结构与算法">
+<meta property="article:tag" content="LeetCode">
+<meta property="article:tag" content="NowCoder">
+<meta property="article:tag" content="二叉树">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://code-thinking.cdn.bcebos.com/gifs/102%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86.gif">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://example.com/2023/10/16/2023-10-16-%E4%BA%8C%E5%8F%89%E6%A0%91%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%B8%8E%E9%81%8D%E5%8E%86%E6%96%B9%E6%B3%95/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Liangshou" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/LiangshouX" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Liangshou</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">软件 &amp; IT</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Beijing, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/LiangshouX" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/xiaoliangshou.bit@gmail.com" target="_blank" title="Email" data-toggle=tooltip data-placement=top><i class="icon icon-email"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3664001491278077" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+        <li><a href="https://www.zhihu.com/people/grillo-72" target="_blank" title="Zhihu" data-toggle=tooltip data-placement=top><i class="icon icon-zhihu"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>本站点目前还未开发/测试留言功能，敬请期待!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java%E6%89%8B%E8%B4%A6%E6%9C%AC/">Java手账本</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0/">刷题日记</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B7%A5%E5%85%B7%E5%BA%93/">工具库</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E6%9C%BABUG/">随机BUG</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github/" rel="tag">Github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML/" rel="tag">HTML</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LeetCode/" rel="tag">LeetCode</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NowCoder/" rel="tag">NowCoder</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emoji/" rel="tag">emoji</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mermaid/" rel="tag">mermaid</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" rel="tag">二叉树</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%90%8E%E7%AB%AF/" rel="tag">后端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" rel="tag">数据结构与算法</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%88/" rel="tag">栈</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%93%BE%E8%A1%A8/" rel="tag">链表</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Github/" style="font-size: 13px;">Github</a> <a href="/tags/HTML/" style="font-size: 13.67px;">HTML</a> <a href="/tags/Java/" style="font-size: 14px;">Java</a> <a href="/tags/LeetCode/" style="font-size: 13.33px;">LeetCode</a> <a href="/tags/MySQL/" style="font-size: 13px;">MySQL</a> <a href="/tags/NowCoder/" style="font-size: 13.33px;">NowCoder</a> <a href="/tags/emoji/" style="font-size: 13px;">emoji</a> <a href="/tags/hexo/" style="font-size: 13.33px;">hexo</a> <a href="/tags/mermaid/" style="font-size: 13px;">mermaid</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 13px;">二叉树</a> <a href="/tags/%E5%90%8E%E7%AB%AF/" style="font-size: 13px;">后端</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 13px;">数据库</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 13.67px;">数据结构与算法</a> <a href="/tags/%E6%A0%88/" style="font-size: 13px;">栈</a> <a href="/tags/%E9%93%BE%E8%A1%A8/" style="font-size: 13px;">链表</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">十月 2023</a><span class="archive-list-count">10</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E9%9A%8F%E6%9C%BABUG/">随机BUG</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/10/21/2023-10-21-hexo%E9%83%A8%E7%BD%B2%E7%9A%84%E9%A1%B5%E9%9D%A2%E4%B8%8D%E6%94%AF%E6%8C%81emoji%E8%A1%A8%E6%83%85%E7%9A%84%E9%97%AE%E9%A2%98/" class="title">hexo渲染的页面不支持emoji表情</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-10-20T16:14:29.704Z" itemprop="datePublished">2023-10-21</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Java%E6%89%8B%E8%B4%A6%E6%9C%AC/">Java手账本</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/10/20/2023-10-20-%E5%85%B3%E4%BA%8EJava%E9%9B%86%E5%90%88/" class="title">关于Java 容器</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-10-20T09:13:55.270Z" itemprop="datePublished">2023-10-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Java%E6%89%8B%E8%B4%A6%E6%9C%AC/">Java手账本</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/10/19/2023-10-19-%E6%88%91%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84Java%E5%B8%B8%E8%AF%86/" class="title">Java 常识？我咋不知道</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-10-19T15:51:41.429Z" itemprop="datePublished">2023-10-19</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0/">刷题日记</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/10/17/2023-10-17-%E9%93%BE%E8%A1%A8%E5%88%B7%E9%A2%98%E2%80%94Java%E7%89%88/" class="title">链表刷题—Java版</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-10-17T12:07:36.377Z" itemprop="datePublished">2023-10-17</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/10/17/2023-10-17-MySQL%E5%9F%BA%E7%A1%80/" class="title">MySQL—— 基础理论概念</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-10-17T01:01:41.415Z" itemprop="datePublished">2023-10-17</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">二叉树的基本定义</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E7%A7%8D%E7%B1%BB"><span class="toc-number">1.1.</span> <span class="toc-text">二叉树的种类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BB%A1%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="toc-number">1.1.1.</span> <span class="toc-text">满二叉树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8C%E5%85%A8%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="toc-number">1.1.2.</span> <span class="toc-text">完全二叉树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91"><span class="toc-number">1.1.3.</span> <span class="toc-text">二叉搜索树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91"><span class="toc-number">1.1.4.</span> <span class="toc-text">平衡二叉搜索树</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F"><span class="toc-number">1.2.</span> <span class="toc-text">二叉树的存储方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%81%8D%E5%8E%86%E6%96%B9%E5%BC%8F"><span class="toc-number">1.3.</span> <span class="toc-text">二叉树的遍历方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.4.</span> <span class="toc-text">二叉树的代码实现</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">二叉树的递归遍历</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%92%E5%BD%92%E7%9A%84%E4%B8%89%E8%A6%81%E7%B4%A0"><span class="toc-number">2.1.</span> <span class="toc-text">递归的三要素</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE%E9%93%BE%E6%8E%A5%E5%8F%8A%E9%A2%98%E8%A7%A3"><span class="toc-number">2.2.</span> <span class="toc-text">题目链接及题解</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">二叉树的迭代遍历</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%AD%E4%BB%A3%E6%B3%95%E9%81%8D%E5%8E%86%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="toc-number">3.1.</span> <span class="toc-text">迭代法遍历的基本原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%9F%E4%B8%80%E8%BF%AD%E4%BB%A3%E6%96%B9%E6%B3%95"><span class="toc-number">3.2.</span> <span class="toc-text">统一迭代方法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">二叉树的层序遍历</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="toc-number">4.1.</span> <span class="toc-text">基本原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE%E9%93%BE%E6%8E%A5"><span class="toc-number">4.2.</span> <span class="toc-text">题目链接</span></a></li></ol></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-2023-10-16-二叉树基本概念与遍历方法" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      二叉树基本定义以及遍历方法
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/10/16/2023-10-16-%E4%BA%8C%E5%8F%89%E6%A0%91%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%B8%8E%E9%81%8D%E5%8E%86%E6%96%B9%E6%B3%95/" class="article-date">
+	  <time datetime="2023-10-15T16:52:39.418Z" itemprop="datePublished">2023-10-16</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0/">刷题日记</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/LeetCode/" rel="tag">LeetCode</a>, <a class="article-tag-link-link" href="/tags/NowCoder/" rel="tag">NowCoder</a>, <a class="article-tag-link-link" href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" rel="tag">二叉树</a>, <a class="article-tag-link-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" rel="tag">数据结构与算法</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/10/16/2023-10-16-%E4%BA%8C%E5%8F%89%E6%A0%91%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%B8%8E%E9%81%8D%E5%8E%86%E6%96%B9%E6%B3%95/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <blockquote>
+<p>本文来自程序员Carl的 <a href="https://programmercarl.com/">代码随想录</a>。</p>
+</blockquote>
+<p>[toc]</p>
+<h1>二叉树的基本定义</h1>
+<h2 id="二叉树的种类">二叉树的种类</h2>
+<p>解题过程中二叉树有两种主要的形式：<strong>满二叉树</strong>和<strong>完全二叉树</strong>。</p>
+<h3 id="满二叉树">满二叉树</h3>
+<p>满二叉树：如果一棵二叉树只有度为0的结点和度为2的结点，并且度为0的结点在同一层上，则这棵二叉树为满二叉树，如下图所示。</p>
+<blockquote>
+<p>文章中使用了画图功能，使用方式参考 <a href="https://zhuanlan.zhihu.com/p/172635547">这篇文章</a>， mermaid语法请参考 <a href="https://mermaid.js.org/intro/">官方文档</a>。</p>
+</blockquote>
+<pre class="mermaid">graph TD
+A--&gt;B
+A--&gt;C
+B--&gt;D
+B--&gt;E
+C--&gt;F
+C--&gt;G
+D--&gt;H
+D--&gt;I
+E--&gt;J
+E--&gt;K
+F--&gt;L
+F--&gt;M
+G--&gt;N
+G--&gt;O</pre>
+<h3 id="完全二叉树">完全二叉树</h3>
+<p>完全二叉树的定义如下：在完全二叉树中，除了最底层节点可能没填满外，其余每层节点数都达到最大值，并且最下面一层的节点都集中在该层最左边的若干位置。若最底层为第 h 层（h从1开始），则该层包含 1~ 2^(h-1) 个节点。如下面的两个是完全二叉树：</p>
+<pre class="mermaid">graph TD
+A--&gt;B
+A--&gt;C
+B--&gt;D
+B--&gt;E
+C--&gt;F
+C--&gt;G
+D--&gt;H
+D--&gt;I
+E--&gt;J</pre>
+<pre class="mermaid">graph TD
+A--&gt;B
+A--&gt;C
+B--&gt;D
+B--&gt;E
+C--&gt;F
+C--&gt;G
+D--&gt;H
+D--&gt;I
+E--&gt;J
+E--&gt;K</pre>
+<p>而下面一个就不是完全二叉树：</p>
+<pre class="mermaid">graph TD
+A--&gt;B
+A--&gt;C
+B--&gt;D
+B--&gt;E
+C--&gt;F
+C--&gt;G
+D--&gt;H
+D--&gt;I
+E--&gt;Null
+E--&gt;K</pre>
+<blockquote>
+<p><strong>优先级队列其实是一个堆，堆就是一棵完全二叉树，同时保证父子节点的顺序关系</strong></p>
+</blockquote>
+<h3 id="二叉搜索树">二叉搜索树</h3>
+<p>相比于前面介绍的没有数值的树，二叉搜索树是有数值的了，<strong>二叉搜索树是一个有序树</strong>。</p>
+<ul>
+<li>若它的左子树不空，则左子树上所有结点的值均<strong>小于</strong>它的根结点的值；</li>
+<li>若它的右子树不空，则右子树上所有结点的值均<strong>大于</strong>它的根结点的值；</li>
+<li>它的左、右子树也分别为二叉排序树</li>
+</ul>
+<p>例如下面这两棵树都是搜索树</p>
+<pre class="mermaid">graph TD
+10--&gt;6
+10--&gt;16
+6--&gt;3
+6--&gt;9
+16--&gt;14
+16--&gt;19</pre>
+<pre class="mermaid">graph TD
+10--&gt;6
+10--&gt;Null
+6--&gt;3
+6--&gt;9</pre>
+<h3 id="平衡二叉搜索树">平衡二叉搜索树</h3>
+<p>平衡二叉搜索树：又被称为AVL（Adelson-Velsky and Landis）树，且具有以下性质：它是一棵空树或它的左右两个子树的高度差的绝对值不超过1，并且左右两个子树都是一棵平衡二叉树。例如：</p>
+<pre class="mermaid">graph TD
+10--&gt;6
+10--&gt;16
+6--&gt;3
+6--&gt;9</pre>
+<pre class="mermaid">graph TD
+10--&gt;6
+10--&gt;16
+6--&gt;3
+6--&gt;9
+16--&gt;14
+16--&gt;19</pre>
+<blockquote>
+<p><strong>C++中map、set、multimap，multiset的底层实现都是平衡二叉搜索树</strong>，所以map、set的增删操作时间时间复杂度是$log\ n$，</p>
+<p>注意这里不包括unordered_map、unordered_set，unordered_map、unordered_set底层实现是哈希表</p>
+</blockquote>
+<h2 id="二叉树的存储方式">二叉树的存储方式</h2>
+<p><strong>二叉树可以链式存储，也可以顺序存储。</strong></p>
+<p>那么链式存储方式就用指针， 顺序存储的方式就是用数组。</p>
+<p>顾名思义就是顺序存储的元素在内存是连续分布的，而链式存储则是通过指针把分布在各个地址的节点串联一起。</p>
+<p>链式存储比较直观，即给每个节点设置左指针和有指针，分别指向左子树和右子树。</p>
+<p>如何顺序存储呢？其实就是用数组来存储二叉树，顺序存储的方式如图：</p>
+<pre class="mermaid">graph TD
+a--&gt;b
+a--&gt;c
+b--&gt;d
+b--&gt;e
+c--&gt;f
+c--&gt;g</pre>
+<p>对应的存储数组为：<code>[a,b,c,d,e,f,g]</code>，下标对应 0-6。</p>
+<p>顺序存储的遍历方式：</p>
+<p><strong>如果父节点的数组下标是 i，那么它的左孩子就是 i * 2 + 1，右孩子就是 i * 2 + 2。</strong></p>
+<p>但是用链式表示的二叉树，更有利于我们理解，所以一般我们都是用链式存储二叉树。</p>
+<h2 id="二叉树的遍历方式">二叉树的遍历方式</h2>
+<blockquote>
+<p>注意总结做题的框架！！</p>
+</blockquote>
+<p>关于二叉树的遍历方式，要知道二叉树遍历的基本方式都有哪些。</p>
+<p>二叉树主要有两种遍历方式：</p>
+<ol>
+<li>深度优先遍历：先往深走，遇到叶子节点再往回走。</li>
+<li>广度优先遍历：一层一层的去遍历。</li>
+</ol>
+<p><strong>这两种遍历是图论中最基本的两种遍历方式</strong>，后面在介绍图论的时候还会介绍到。</p>
+<p>那么从深度优先遍历和广度优先遍历进一步拓展，才有如下遍历方式：</p>
+<ul>
+<li>深度优先遍历
+<ul>
+<li>前序遍历（递归法，迭代法）</li>
+<li>中序遍历（递归法，迭代法）</li>
+<li>后序遍历（递归法，迭代法）</li>
+</ul>
+</li>
+<li>广度优先遍历
+<ul>
+<li>层次遍历（迭代法）</li>
+</ul>
+</li>
+</ul>
+<p>在深度优先遍历中：有三个顺序，前中后序遍历。<strong>这里前中后，其实指的就是中间节点的遍历顺序</strong>，因此只需要记住： 前中后序指的就是中间节点的位置。</p>
+<p>看如下中间节点的顺序，就可以发现，中间节点的顺序就是所谓的遍历方式</p>
+<ul>
+<li>前序遍历：中左右</li>
+<li>中序遍历：左中右</li>
+<li>后序遍历：左右中</li>
+</ul>
+<p>例如对于下面的图，前中后序遍历的顺序依次是：</p>
+<ul>
+<li>前序（DLR）：abdecfg</li>
+<li>中序（LDR）：dbeafcg</li>
+<li>后序（LRD）：debfgca</li>
+</ul>
+<pre class="mermaid">graph TD
+a--&gt;b
+a--&gt;c
+b--&gt;d
+b--&gt;e
+c--&gt;f
+c--&gt;g</pre>
+<p>最后是二叉树中深度优先和广度优先遍历实现方式，我们做二叉树相关题目，经常会使用递归的方式来实现深度优先遍历，也就是实现前中后序遍历，使用递归是比较方便的。</p>
+<p>前中后序遍历的逻辑其实都是可以借助栈使用递归的方式来实现的。</p>
+<p>而广度优先遍历的实现一般使用队列来实现，这也是队列先进先出的特点所决定的，因为需要先进先出的结构，才能一层一层的来遍历二叉树。</p>
+<h2 id="二叉树的代码实现">二叉树的代码实现</h2>
+<blockquote>
+<p><strong>在现场面试的时候 面试官可能要求手写代码，所以数据结构的定义以及简单逻辑的代码一定要锻炼白纸写出来。</strong></p>
+<p>因为我们在刷leetcode的时候，节点的定义默认都定义好了，真到面试的时候，需要自己写节点定义的时候，有时候会一脸懵逼！</p>
+</blockquote>
+<figure class="highlight c++"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// C++代码</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">TreeNode</span> {</span><br><span class="line">    <span class="type">int</span> val;</span><br><span class="line">    TreeNode *left;</span><br><span class="line">    TreeNode *right;</span><br><span class="line">    <span class="built_in">TreeNode</span>(<span class="type">int</span> x) : <span class="built_in">val</span>(x), <span class="built_in">left</span>(<span class="literal">NULL</span>), <span class="built_in">right</span>(<span class="literal">NULL</span>) {}</span><br><span class="line">};</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// java 代码</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TreeNode</span> {</span><br><span class="line">    <span class="type">int</span> val;</span><br><span class="line">    TreeNode left;</span><br><span class="line">    TreeNode right;</span><br><span class="line"></span><br><span class="line">    TreeNode() {}</span><br><span class="line">    TreeNode(<span class="type">int</span> val) { <span class="built_in">this</span>.val = val; }</span><br><span class="line">    TreeNode(<span class="type">int</span> val, TreeNode left, TreeNode right) {</span><br><span class="line">        <span class="built_in">this</span>.val = val;</span><br><span class="line">        <span class="built_in">this</span>.left = left;</span><br><span class="line">        <span class="built_in">this</span>.right = right;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h1>二叉树的递归遍历</h1>
+<h2 id="递归的三要素">递归的三要素</h2>
+<p>本部分将介绍前后中序的递归写法。首先确定下来递归算法的三个要素。<strong>每次写递归，都按照这三要素来写，可以保证大家写出正确的递归算法！</strong></p>
+<ol>
+<li><strong>确定递归函数的参数和返回值：</strong> 确定哪些参数是递归的过程中需要处理的，那么就在递归函数里加上这个参数， 并且还要明确每次递归的返回值是什么进而确定递归函数的返回类型。</li>
+<li><strong>确定终止条件：</strong> 写完了递归算法, 运行的时候，经常会遇到栈溢出的错误，就是没写终止条件或者终止条件写的不对，操作系统也是用一个栈的结构来保存每一层递归的信息，如果递归没有终止，操作系统的内存栈必然就会溢出。</li>
+<li><strong>确定单层递归的逻辑：</strong> 确定每一层递归需要处理的信息。在这里也就会重复调用自己来实现递归的过程。</li>
+</ol>
+<h2 id="题目链接及题解">题目链接及题解</h2>
+<ol>
+<li><a href="https://leetcode.cn/problems/binary-tree-preorder-traversal/">LC144_二叉树的前序遍历</a>
+<ol>
+<li>确定递归函数的参数和返回值。预设代码给出了preorderTraversal函数，其参数为 TreeNode类型的root节点，返回List&lt;Integer&gt;类型。实现递归函数preorder，该函数主要实现对二叉树的遍历，并把遍历结果插入result向量中，返回值为void；参数需要两个：当前的结点和result向量</li>
+<li>确定终止条件：当前结点为 null 时递归终止</li>
+<li>单层递归逻辑：DLR</li>
+</ol>
+</li>
+</ol>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> {</span><br><span class="line">    <span class="keyword">public</span> List&lt;Integer&gt; <span class="title function_">preorderTraversal</span><span class="params">(TreeNode root)</span> {</span><br><span class="line">        List&lt;Integer&gt; result = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">        preorder(root, result);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 确定参数：当前节点 和 result List</span></span><br><span class="line">    <span class="comment">// 返回值： void</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">preorder</span><span class="params">(TreeNode curr, List&lt;Integer&gt; result)</span>{</span><br><span class="line">        <span class="comment">// 终止条件</span></span><br><span class="line">        <span class="keyword">if</span>(curr == <span class="literal">null</span>){</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        }</span><br><span class="line">        <span class="comment">// 单层递归逻辑：DLR</span></span><br><span class="line">        result.add(curr.val);</span><br><span class="line">        preorder(curr.left, result);</span><br><span class="line">        preorder(curr.right, result);</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<ol start="2">
+<li><a href="https://leetcode.cn/problems/binary-tree-postorder-traversal/">LC94_二叉树的中序遍历</a></li>
+</ol>
+<blockquote>
+<p>原理&amp;思路同上一题</p>
+</blockquote>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> {</span><br><span class="line">    <span class="keyword">public</span> List&lt;Integer&gt; <span class="title function_">postorderTraversal</span><span class="params">(TreeNode root)</span> {</span><br><span class="line">        List&lt;Integer&gt; result = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">        postorder(root, result);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// LRD</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">postorder</span><span class="params">(TreeNode curr, List&lt;Integer&gt; result)</span>{</span><br><span class="line">        <span class="keyword">if</span>(curr == <span class="literal">null</span>){</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        }</span><br><span class="line">        postorder(curr.left, result);</span><br><span class="line">        postorder(curr.right, result);</span><br><span class="line">        result.add(curr.val);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<ol start="3">
+<li><a href="https://leetcode.cn/problems/binary-tree-inorder-traversal/">LC145_二叉树的后序遍历</a></li>
+</ol>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> {</span><br><span class="line">    <span class="keyword">public</span> List&lt;Integer&gt; <span class="title function_">inorderTraversal</span><span class="params">(TreeNode root)</span> {</span><br><span class="line">        List&lt;Integer&gt; result = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">        inorder(root, result);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">inorder</span><span class="params">(TreeNode curr, List&lt;Integer&gt; result)</span>{</span><br><span class="line">        <span class="keyword">if</span>(curr == <span class="literal">null</span>){</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        }</span><br><span class="line">        inorder(curr.left, result);</span><br><span class="line">        result.add(curr.val);</span><br><span class="line">        inorder(curr.right, result);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p><a href="https://www.nowcoder.com/share/jump/8214310031697402552220">BM24 二叉树的中序遍历</a></p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Solution</span> {</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 代码中的类名、方法名、参数名已经指定，请勿修改，直接返回方法规定的值即可</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * </span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> root TreeNode类 </span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> int整型一维数组</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span>[] inorderTraversal (TreeNode root) {</span><br><span class="line">        List&lt;Integer&gt; result = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">        inorder(root, result);</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span>[] resultArr = result.stream().mapToInt(i -&gt; i).toArray();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> resultArr;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">inorder</span><span class="params">(TreeNode curr, List&lt;Integer&gt; result)</span>{</span><br><span class="line">        <span class="keyword">if</span>(curr == <span class="literal">null</span>){</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        }</span><br><span class="line">        inorder(curr.left, result);</span><br><span class="line">        result.add(curr.val);</span><br><span class="line">        inorder(curr.right, result);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p><a href="https://www.nowcoder.com/share/jump/8214310031697403236272">BM25 二叉树的后序遍历</a></p>
+<p><a href="https://www.nowcoder.com/share/jump/8214310031697403428551">BM23 二叉树的前序遍历</a></p>
+<h1>二叉树的迭代遍历</h1>
+<blockquote>
+<p>见 <a href="https://programmercarl.com/">代码随想录</a>。</p>
+</blockquote>
+<h2 id="迭代法遍历的基本原理">迭代法遍历的基本原理</h2>
+<blockquote>
+<p>此部分建议细读 <a href="https://programmercarl.com/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E8%BF%AD%E4%BB%A3%E9%81%8D%E5%8E%86.html">代码随想录-二叉树的迭代遍历</a> 理解迭代遍历的基本原理。</p>
+</blockquote>
+<h2 id="统一迭代方法">统一迭代方法</h2>
+<p>迭代法实现的先中后序，其实风格并不是那么统一，除了先序和后序，有关联，中序完全就是另一个风格了，一会用栈遍历，一会又用指针来遍历。</p>
+<p>经过实践会发现使用迭代法实现先中后序遍历，很难写出统一的代码，不像是递归法，实现了其中的一种遍历方式，其他两种只要稍稍改一下节点顺序就可以了。</p>
+<p>统一写法的基本思路是：<strong>将访问的节点放入栈中，把要处理的节点也放入栈中但是要做标记</strong>。</p>
+<p>如何标记呢，<strong>就是要处理的节点放入栈之后，紧接着放入一个空指针作为标记。</strong> 这种方法也可以叫做标记法</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 前序</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> {</span><br><span class="line">    <span class="keyword">public</span> List&lt;Integer&gt; <span class="title function_">preorderTraversal</span><span class="params">(TreeNode root)</span> {</span><br><span class="line">        List&lt;Integer&gt; result = <span class="keyword">new</span> <span class="title class_">LinkedList</span>&lt;&gt;();</span><br><span class="line">        Stack&lt;TreeNode&gt; st = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;&gt;();</span><br><span class="line">        <span class="keyword">if</span> (root != <span class="literal">null</span>) st.push(root);</span><br><span class="line">        <span class="keyword">while</span> (!st.empty()) {</span><br><span class="line">            <span class="type">TreeNode</span> <span class="variable">node</span> <span class="operator">=</span> st.peek();</span><br><span class="line">            <span class="keyword">if</span> (node != <span class="literal">null</span>) {</span><br><span class="line">                st.pop(); <span class="comment">// 将该节点弹出，避免重复操作，下面再将右中左节点添加到栈中</span></span><br><span class="line">                <span class="keyword">if</span> (node.right!=<span class="literal">null</span>) st.push(node.right);  <span class="comment">// 添加右节点（空节点不入栈）</span></span><br><span class="line">                <span class="keyword">if</span> (node.left!=<span class="literal">null</span>) st.push(node.left);    <span class="comment">// 添加左节点（空节点不入栈）</span></span><br><span class="line">                st.push(node);                          <span class="comment">// 添加中节点</span></span><br><span class="line">                st.push(<span class="literal">null</span>); <span class="comment">// 中节点访问过，但是还没有处理，加入空节点做为标记。</span></span><br><span class="line">                </span><br><span class="line">            } <span class="keyword">else</span> { <span class="comment">// 只有遇到空节点的时候，才将下一个节点放进结果集</span></span><br><span class="line">                st.pop();           <span class="comment">// 将空节点弹出</span></span><br><span class="line">                node = st.peek();    <span class="comment">// 重新取出栈中元素</span></span><br><span class="line">                st.pop();</span><br><span class="line">                result.add(node.val); <span class="comment">// 加入到结果集</span></span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 中序</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> {</span><br><span class="line"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title function_">inorderTraversal</span><span class="params">(TreeNode root)</span> {</span><br><span class="line">        List&lt;Integer&gt; result = <span class="keyword">new</span> <span class="title class_">LinkedList</span>&lt;&gt;();</span><br><span class="line">    Stack&lt;TreeNode&gt; st = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;&gt;();</span><br><span class="line">    <span class="keyword">if</span> (root != <span class="literal">null</span>) st.push(root);</span><br><span class="line">    <span class="keyword">while</span> (!st.empty()) {</span><br><span class="line">        <span class="type">TreeNode</span> <span class="variable">node</span> <span class="operator">=</span> st.peek();</span><br><span class="line">        <span class="keyword">if</span> (node != <span class="literal">null</span>) {</span><br><span class="line">            st.pop(); <span class="comment">// 将该节点弹出，避免重复操作，下面再将右中左节点添加到栈中</span></span><br><span class="line">            <span class="keyword">if</span> (node.right!=<span class="literal">null</span>) st.push(node.right);  <span class="comment">// 添加右节点（空节点不入栈）</span></span><br><span class="line">            st.push(node);                          <span class="comment">// 添加中节点</span></span><br><span class="line">            st.push(<span class="literal">null</span>); <span class="comment">// 中节点访问过，但是还没有处理，加入空节点做为标记。</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (node.left!=<span class="literal">null</span>) st.push(node.left);    <span class="comment">// 添加左节点（空节点不入栈）</span></span><br><span class="line">        } <span class="keyword">else</span> { <span class="comment">// 只有遇到空节点的时候，才将下一个节点放进结果集</span></span><br><span class="line">            st.pop();           <span class="comment">// 将空节点弹出</span></span><br><span class="line">            node = st.peek();    <span class="comment">// 重新取出栈中元素</span></span><br><span class="line">            st.pop();</span><br><span class="line">            result.add(node.val); <span class="comment">// 加入到结果集</span></span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 后序</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> {</span><br><span class="line">   <span class="keyword">public</span> List&lt;Integer&gt; <span class="title function_">postorderTraversal</span><span class="params">(TreeNode root)</span> {</span><br><span class="line">        List&lt;Integer&gt; result = <span class="keyword">new</span> <span class="title class_">LinkedList</span>&lt;&gt;();</span><br><span class="line">        Stack&lt;TreeNode&gt; st = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;&gt;();</span><br><span class="line">        <span class="keyword">if</span> (root != <span class="literal">null</span>) st.push(root);</span><br><span class="line">        <span class="keyword">while</span> (!st.empty()) {</span><br><span class="line">            <span class="type">TreeNode</span> <span class="variable">node</span> <span class="operator">=</span> st.peek();</span><br><span class="line">            <span class="keyword">if</span> (node != <span class="literal">null</span>) {</span><br><span class="line">                st.pop(); <span class="comment">// 将该节点弹出，避免重复操作，下面再将右中左节点添加到栈中</span></span><br><span class="line">                st.push(node);                          <span class="comment">// 添加中节点</span></span><br><span class="line">                st.push(<span class="literal">null</span>); <span class="comment">// 中节点访问过，但是还没有处理，加入空节点做为标记。</span></span><br><span class="line">                <span class="keyword">if</span> (node.right!=<span class="literal">null</span>) st.push(node.right);  <span class="comment">// 添加右节点（空节点不入栈）</span></span><br><span class="line">                <span class="keyword">if</span> (node.left!=<span class="literal">null</span>) st.push(node.left);    <span class="comment">// 添加左节点（空节点不入栈）         </span></span><br><span class="line">                               </span><br><span class="line">            } <span class="keyword">else</span> { <span class="comment">// 只有遇到空节点的时候，才将下一个节点放进结果集</span></span><br><span class="line">                st.pop();           <span class="comment">// 将空节点弹出</span></span><br><span class="line">                node = st.peek();    <span class="comment">// 重新取出栈中元素</span></span><br><span class="line">                st.pop();</span><br><span class="line">                result.add(node.val); <span class="comment">// 加入到结果集</span></span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">   }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h1>二叉树的层序遍历</h1>
+<h2 id="基本原理">基本原理</h2>
+<p>层序遍历一个二叉树。就是从左到右一层一层的去遍历二叉树。这种遍历的方式需要借用一个辅助数据结构即队列来实现，<strong>队列先进先出，符合一层一层遍历的逻辑，而用栈先进后出适合模拟深度优先遍历也就是递归的逻辑。</strong></p>
+<p><strong>而这种层序遍历方式就是图论中的广度优先遍历，只不过我们应用在二叉树上。</strong></p>
+<p>使用队列实现二叉树广度优先遍历，动画如下：</p>
+<p><img src="https://code-thinking.cdn.bcebos.com/gifs/102%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86.gif" alt="102二叉树的层序遍历"></p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 102.二叉树的层序遍历</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> {</span><br><span class="line">    <span class="keyword">public</span> List&lt;List&lt;Integer&gt;&gt; resList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;List&lt;Integer&gt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> List&lt;List&lt;Integer&gt;&gt; <span class="title function_">levelOrder</span><span class="params">(TreeNode root)</span> {</span><br><span class="line">        <span class="comment">//checkFun01(root,0);</span></span><br><span class="line">        checkFun02(root);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> resList;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">//DFS--递归方式</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">checkFun01</span><span class="params">(TreeNode node, Integer deep)</span> {</span><br><span class="line">        <span class="keyword">if</span> (node == <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line">        deep++;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (resList.size() &lt; deep) {</span><br><span class="line">            <span class="comment">//当层级增加时，list的Item也增加，利用list的索引值进行层级界定</span></span><br><span class="line">            List&lt;Integer&gt; item = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Integer&gt;();</span><br><span class="line">            resList.add(item);</span><br><span class="line">        }</span><br><span class="line">        resList.get(deep - <span class="number">1</span>).add(node.val);</span><br><span class="line"></span><br><span class="line">        checkFun01(node.left, deep);</span><br><span class="line">        checkFun01(node.right, deep);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">//BFS--迭代方式--借助队列</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">checkFun02</span><span class="params">(TreeNode node)</span> {</span><br><span class="line">        <span class="keyword">if</span> (node == <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line">        Queue&lt;TreeNode&gt; que = <span class="keyword">new</span> <span class="title class_">LinkedList</span>&lt;TreeNode&gt;();</span><br><span class="line">        que.offer(node);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (!que.isEmpty()) {</span><br><span class="line">            List&lt;Integer&gt; itemList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Integer&gt;();</span><br><span class="line">            <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> que.size();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">while</span> (len &gt; <span class="number">0</span>) {</span><br><span class="line">                <span class="type">TreeNode</span> <span class="variable">tmpNode</span> <span class="operator">=</span> que.poll();</span><br><span class="line">                itemList.add(tmpNode.val);</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (tmpNode.left != <span class="literal">null</span>) que.offer(tmpNode.left);</span><br><span class="line">                <span class="keyword">if</span> (tmpNode.right != <span class="literal">null</span>) que.offer(tmpNode.right);</span><br><span class="line">                len--;</span><br><span class="line">            }</span><br><span class="line"></span><br><span class="line">            resList.add(itemList);</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="题目链接">题目链接</h2>
+<ol>
+<li><a href="https://leetcode.cn/problems/binary-tree-level-order-traversal/">LC102. 二叉树的层序遍历</a>；</li>
+<li><a href="https://leetcode.cn/problems/binary-tree-level-order-traversal-ii/">LC107. 二叉树的层序遍历 II</a>；</li>
+<li><a href="https://leetcode.cn/problems/binary-tree-right-side-view/">LC199. 二叉树的右视图</a>；</li>
+<li></li>
+</ol>
+
+      
+    </div>
+    <div class="article-footer">
+      
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/LiangshouX" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/LiangshouX" target="_blank"><span class="text-dark">Liangshou</span><small class="ml-1x">软件 &amp; IT</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2023/10/16/2023-10-16-hexo%E9%83%A8%E7%BD%B2%E7%9A%84%E9%A1%B5%E9%9D%A2%E4%B8%8D%E6%94%AF%E6%8C%81mermaid%E8%AF%AD%E6%B3%95/" title="hexo渲染的页面不支持mermaid语法"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2023/10/15/2023-10-15-hello-world/" title="Hello World"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/LiangshouX" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/xiaoliangshou.bit@gmail.com" target="_blank" title="Email" data-toggle=tooltip data-placement=top><i class="icon icon-email"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3664001491278077" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+        <li><a href="https://www.zhihu.com/people/grillo-72" target="_blank" title="Zhihu" data-toggle=tooltip data-placement=top><i class="icon icon-zhihu"></i></a></li>
+        
+    </ul>
+
+    
+        <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+        <script>
+          if (window.mermaid) {
+            mermaid.initialize({theme: 'forest'});
+          }
+        </script>
+    
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/LiangshouX" target="_blank"> Liangshou </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
