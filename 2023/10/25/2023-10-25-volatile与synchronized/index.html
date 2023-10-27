@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>你好，volatile！你好，synchronized！ | Liangshou</title>
+  <meta name="description" content="Synchronized和Volatile是两个在Java中用于处理多线程编程的关键字，它们分别用于实现线程同步和确保可见性。在Java多线程编程中，二者是互补的存在，而不是对立的存在。 volatile 在 Java 中，volatile 关键字可以保证变量的可见性，如果我们将变量声明为 volatile ，这就指示 JVM，这个变量是共享且不稳定的，每次使用它都到主存中进行读取。 指令重排 在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="你好，volatile！你好，synchronized！">
+<meta property="og:url" content="http://example.com/2023/10/25/2023-10-25-volatile%E4%B8%8Esynchronized/index.html">
+<meta property="og:site_name" content="Liangshou">
+<meta property="og:description" content="Synchronized和Volatile是两个在Java中用于处理多线程编程的关键字，它们分别用于实现线程同步和确保可见性。在Java多线程编程中，二者是互补的存在，而不是对立的存在。 volatile 在 Java 中，volatile 关键字可以保证变量的可见性，如果我们将变量声明为 volatile ，这就指示 JVM，这个变量是共享且不稳定的，每次使用它都到主存中进行读取。 指令重排 在">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://typora-1308640872.cos.ap-beijing.myqcloud.com/img/image-20231027134827905.png">
+<meta property="og:image" content="https://typora-1308640872.cos.ap-beijing.myqcloud.com/img/image-20231027135643151.png">
+<meta property="article:published_time" content="2023-10-25T12:18:17.726Z">
+<meta property="article:modified_time" content="2023-10-27T06:55:42.890Z">
+<meta property="article:author" content="Liangshou">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="并发编程">
+<meta property="article:tag" content="Java线程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://typora-1308640872.cos.ap-beijing.myqcloud.com/img/image-20231027134827905.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://example.com/2023/10/25/2023-10-25-volatile%E4%B8%8Esynchronized/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Liangshou" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/LiangshouX" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Liangshou</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">软件 &amp; IT</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Beijing, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/LiangshouX" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/xiaoliangshou.bit@gmail.com" target="_blank" title="Email" data-toggle=tooltip data-placement=top><i class="icon icon-email"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3664001491278077" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+        <li><a href="https://www.zhihu.com/people/grillo-72" target="_blank" title="Zhihu" data-toggle=tooltip data-placement=top><i class="icon icon-zhihu"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>本站点目前还未开发/测试留言功能，敬请期待!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Java%E6%89%8B%E8%B4%A6%E6%9C%AC/">Java手账本</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0/">刷题日记</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B7%A5%E5%85%B7%E5%BA%93/">工具库</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E6%9C%BABUG/">随机BUG</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github/" rel="tag">Github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML/" rel="tag">HTML</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E7%BA%BF%E7%A8%8B/" rel="tag">Java线程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LeetCode/" rel="tag">LeetCode</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NowCoder/" rel="tag">NowCoder</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emoji/" rel="tag">emoji</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mermaid/" rel="tag">mermaid</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" rel="tag">二叉树</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%90%8E%E7%AB%AF/" rel="tag">后端</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" rel="tag">并发编程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" rel="tag">数据结构与算法</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%88/" rel="tag">栈</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/" rel="tag">滑动窗口</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%93%BE%E8%A1%A8/" rel="tag">链表</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Github/" style="font-size: 13px;">Github</a> <a href="/tags/HTML/" style="font-size: 13.4px;">HTML</a> <a href="/tags/Java/" style="font-size: 14px;">Java</a> <a href="/tags/Java%E7%BA%BF%E7%A8%8B/" style="font-size: 13px;">Java线程</a> <a href="/tags/LeetCode/" style="font-size: 13.6px;">LeetCode</a> <a href="/tags/MySQL/" style="font-size: 13px;">MySQL</a> <a href="/tags/NowCoder/" style="font-size: 13.6px;">NowCoder</a> <a href="/tags/emoji/" style="font-size: 13px;">emoji</a> <a href="/tags/hexo/" style="font-size: 13.2px;">hexo</a> <a href="/tags/mermaid/" style="font-size: 13px;">mermaid</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 13px;">二叉树</a> <a href="/tags/%E5%90%8E%E7%AB%AF/" style="font-size: 13px;">后端</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 13px;">并发编程</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 13px;">数据库</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 13.8px;">数据结构与算法</a> <a href="/tags/%E6%A0%88/" style="font-size: 13px;">栈</a> <a href="/tags/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/" style="font-size: 13px;">滑动窗口</a> <a href="/tags/%E9%93%BE%E8%A1%A8/" style="font-size: 13.4px;">链表</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">十月 2023</a><span class="archive-list-count">14</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0/">刷题日记</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/10/25/2023-10-25-%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0/" class="title">LC热题100-前缀和+哈希表</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-10-25T15:43:31.248Z" itemprop="datePublished">2023-10-25</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Java%E6%89%8B%E8%B4%A6%E6%9C%AC/">Java手账本</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/10/25/2023-10-25-volatile%E4%B8%8Esynchronized/" class="title">你好，volatile！你好，synchronized！</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-10-25T12:18:17.726Z" itemprop="datePublished">2023-10-25</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0/">刷题日记</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/10/24/2023-10-24-%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0/" class="title">LC热题100-无重复字符的最长子串</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-10-24T11:40:12.465Z" itemprop="datePublished">2023-10-24</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%88%B7%E9%A2%98%E6%97%A5%E8%AE%B0/">刷题日记</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/10/23/2023-10-23-%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0/" class="title">LC热题100-</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-10-23T00:12:00.152Z" itemprop="datePublished">2023-10-23</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E9%9A%8F%E6%9C%BABUG/">随机BUG</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/10/21/2023-10-21-hexo%E9%83%A8%E7%BD%B2%E7%9A%84%E9%A1%B5%E9%9D%A2%E4%B8%8D%E6%94%AF%E6%8C%81emoji%E8%A1%A8%E6%83%85%E7%9A%84%E9%97%AE%E9%A2%98/" class="title">hexo渲染的页面不支持emoji表情</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-10-20T16:14:29.704Z" itemprop="datePublished">2023-10-21</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+  <aside class="sidebar sidebar-toc collapse   in  " id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">volatile</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92"><span class="toc-number">1.1.</span> <span class="toc-text">指令重排</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92%EF%BC%9F"><span class="toc-number">1.1.1.</span> <span class="toc-text">什么是指令重排？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E4%BC%9A%E5%8F%91%E7%94%9F%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92%EF%BC%9F"><span class="toc-number">1.1.2.</span> <span class="toc-text">什么时候会发生指令重排？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E4%B8%AA%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92%E7%9A%84%E5%A4%8D%E7%8E%B0%E6%A1%88%E4%BE%8B"><span class="toc-number">1.1.3.</span> <span class="toc-text">一个指令重排的复现案例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#volatile-%E7%A6%81%E6%AD%A2%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92"><span class="toc-number">1.2.</span> <span class="toc-text">volatile 禁止指令重排</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#volatile%E4%BF%9D%E8%AF%81%E5%8F%98%E9%87%8F%E7%9A%84%E5%8F%AF%E8%A7%81%E6%80%A7"><span class="toc-number">1.3.</span> <span class="toc-text">volatile保证变量的可见性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#volatile%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7"><span class="toc-number">1.4.</span> <span class="toc-text">volatile不保证原子性</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">synchronized</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">2.1.</span> <span class="toc-text">具体使用场景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B%E6%96%B9%E6%B3%95%E4%B8%8E%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95"><span class="toc-number">2.1.1.</span> <span class="toc-text">实例方法与静态方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#synchronized%E4%BF%AE%E9%A5%B0%E5%AE%9E%E4%BE%8B%E6%96%B9%E6%B3%95"><span class="toc-number">2.1.2.</span> <span class="toc-text">synchronized修饰实例方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#synchronized%E4%BF%AE%E9%A5%B0%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95"><span class="toc-number">2.1.3.</span> <span class="toc-text">synchronized修饰静态方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#synchronized%E4%BF%AE%E9%A5%B0%E4%BB%A3%E7%A0%81%E5%9D%97"><span class="toc-number">2.1.4.</span> <span class="toc-text">synchronized修饰代码块</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#synchronized-%E4%BF%9D%E8%AF%81%E6%93%8D%E4%BD%9C%E7%9A%84%E5%8F%AF%E8%A7%81%E6%80%A7"><span class="toc-number">2.2.</span> <span class="toc-text">synchronized 保证操作的可见性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#synchronized-%E4%BF%9D%E8%AF%81%E6%93%8D%E4%BD%9C%E7%9A%84%E5%8E%9F%E5%AD%90%E6%80%A7"><span class="toc-number">2.3.</span> <span class="toc-text">synchronized 保证操作的原子性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#synchronized-%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86"><span class="toc-number">2.4.</span> <span class="toc-text">synchronized 底层原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E4%BA%8E%E4%BF%AE%E9%A5%B0%E4%BB%A3%E7%A0%81%E5%9D%97%E7%9A%84%E6%83%85%E5%86%B5"><span class="toc-number">2.4.1.</span> <span class="toc-text">对于修饰代码块的情况</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E4%BA%8E%E4%BF%AE%E9%A5%B0%E6%96%B9%E6%B3%95%E7%9A%84%E6%83%85%E5%86%B5"><span class="toc-number">2.4.2.</span> <span class="toc-text">对于修饰方法的情况</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">synchronized 和 volatile 的区别</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-2023-10-25-volatile与synchronized" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      你好，volatile！你好，synchronized！
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/10/25/2023-10-25-volatile%E4%B8%8Esynchronized/" class="article-date">
+	  <time datetime="2023-10-25T12:18:17.726Z" itemprop="datePublished">2023-10-25</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Java%E6%89%8B%E8%B4%A6%E6%9C%AC/">Java手账本</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Java/" rel="tag">Java</a>, <a class="article-tag-link-link" href="/tags/Java%E7%BA%BF%E7%A8%8B/" rel="tag">Java线程</a>, <a class="article-tag-link-link" href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" rel="tag">并发编程</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/10/25/2023-10-25-volatile%E4%B8%8Esynchronized/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p><code>Synchronized</code>和<code>Volatile</code>是两个在Java中用于处理多线程编程的关键字，它们分别用于实现<strong>线程同步</strong>和<strong>确保可见性</strong>。在Java多线程编程中，二者是互补的存在，而不是对立的存在。</p>
+<h1>volatile</h1>
+<p>在 Java 中，<code>volatile</code> 关键字可以保证变量的可见性，如果我们将变量声明为 <code>volatile</code> ，这就指示 JVM，这个变量是共享且不稳定的，每次使用它都到主存中进行读取。</p>
+<h2 id="指令重排">指令重排</h2>
+<p><strong>在 Java 中，<code>volatile</code> 关键字除了可以保证变量的可见性，还有一个重要的作用就是防止 JVM 的指令重排序。</strong> 如果我们将变量声明为 <strong><code>volatile</code></strong> ，在对这个变量进行读写操作的时候，会通过插入特定的 <strong>内存屏障</strong> 的方式来禁止指令重排序。</p>
+<h3 id="什么是指令重排？">什么是指令重排？</h3>
+<blockquote>
+<p>简单来说，就是指在程序中写的代码，在执行时并不一定按照写的顺序。</p>
+</blockquote>
+<p>Java指令重排是一种编译器和JVM（Java虚拟机）优化技术，为了使处理器内部的运算单元能尽量被充分利用，处理器可能会对输入的代码进行<strong>乱序执行优化</strong>，处理器会在计算之后将乱序执行的结果重组，并确保这一结果和顺序执行结果是一致的，但是这个过程并不保证各个语句<strong>计算的先后顺序</strong>和<strong>输入代码中的顺序</strong>一致。这就是指令重排序。</p>
+<h3 id="什么时候会发生指令重排？">什么时候会发生指令重排？</h3>
+<ol>
+<li>编译器重排：编译器在生成字节码或本机代码时可能会重新排列指令，以优化执行路径。这种重排通常是在不改变程序语义的前提下进行的。</li>
+<li>处理器重排：现代处理器通常具有多级流水线，它们可以重新排列执行指令以充分利用硬件资源。处理器重排是在指令级别进行的，它不会改变程序的语义，但可能会影响线程之间的可见性。</li>
+<li>JVM重排：JVM也可能会重新排列Java字节码指令以提高性能。这种重排也是在不改变程序语义的前提下进行的。</li>
+</ol>
+<h3 id="一个指令重排的复现案例">一个指令重排的复现案例</h3>
+<p>定义四个静态变量x,y,a,b，每次循环时让他们都等于0，接着用两个线程，<strong>第一个线程执行a=1;x=b;第二个线程执行b=1;y=a。</strong></p>
+<p>从逻辑上来讲，这段程序<strong>应该有3个结果：</strong></p>
+<ol>
+<li>当第一个线程执行到a=1的时候，第二个线程执行到了b=1，最后<strong>x=1，y=1</strong>；</li>
+<li>当第一个线程执行完，第二个线程才刚开始，最后<strong>x=0，y=1</strong>；</li>
+<li>当第二个线程执行完，第一个线程才开始，最后<strong>x=1，y=0</strong>；</li>
+</ol>
+<p>理论上无论怎么样都不可能x=0,y=0;</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">VolatileReOrderDemo</span> {</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">x</span> <span class="operator">=</span> <span class="number">0</span>, y = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">a</span> <span class="operator">=</span> <span class="number">0</span>, b = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException{</span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">do</span> {</span><br><span class="line">            i++;</span><br><span class="line">            x = <span class="number">0</span>;  y = <span class="number">0</span>;</span><br><span class="line">            a = <span class="number">0</span>;  b = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 开两个线程，第一个线程执行 a=1；x=b；   第二个线程执行 b=1;y=a</span></span><br><span class="line">            <span class="type">Thread</span> <span class="variable">thread1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">Runnable</span>() {</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> {</span><br><span class="line">                    <span class="comment">// 线程1会比线程2先执行，因此用nanoTime让线程1等待线程2 0.01毫秒</span></span><br><span class="line">                    shortWait(<span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line">                    a = <span class="number">1</span>;</span><br><span class="line">                    x = b;</span><br><span class="line">                }</span><br><span class="line">            });</span><br><span class="line"></span><br><span class="line">            <span class="type">Thread</span> <span class="variable">thread2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">Runnable</span>() {</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> {</span><br><span class="line">                    b = <span class="number">1</span>;</span><br><span class="line">                    y = a;</span><br><span class="line">                }</span><br><span class="line">            });</span><br><span class="line"></span><br><span class="line">            thread1.start();</span><br><span class="line">            thread2.start();</span><br><span class="line"></span><br><span class="line">            thread1.join();</span><br><span class="line">            thread2.join();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 两个线程都执行完成后拼接结果</span></span><br><span class="line">            <span class="type">String</span> <span class="variable">result</span> <span class="operator">=</span> String.format(<span class="string">"第 %d 次执行:\tx=%d\ty=%d"</span>, i, x, y);</span><br><span class="line">            System.out.println(result);</span><br><span class="line"></span><br><span class="line">        } <span class="keyword">while</span> (x != <span class="number">0</span> || y != <span class="number">0</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 使用了一个循环来等待一段时间，但不涉及锁或通知机制。它不会释放锁，也不会等待其他线程的通知。</span></span><br><span class="line"><span class="comment">     * 仅用于简单的等待一段时间，而不是线程之间的协作。</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> interval 等待的时间间隔</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">shortWait</span><span class="params">(<span class="type">long</span> interval)</span>{</span><br><span class="line">        <span class="type">long</span> <span class="variable">start</span> <span class="operator">=</span> System.nanoTime();</span><br><span class="line">        <span class="type">long</span> end;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">do</span> {</span><br><span class="line">            end = System.nanoTime();</span><br><span class="line">        }<span class="keyword">while</span> (start + interval &gt;= end);</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<p>实际上，当程序运行几万或几十几百万次后，会出现<code>x=0,y=0;</code>的结果：</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">第 4870627 次执行:	x=0	y=1</span><br><span class="line">第 4870628 次执行:	x=0	y=1</span><br><span class="line">第 4870629 次执行:	x=0	y=1</span><br><span class="line">第 4870630 次执行:	x=0	y=1</span><br><span class="line">第 4870631 次执行:	x=0	y=0</span><br></pre></td></tr></tbody></table></figure>
+<p>这就是因为指令被重排序了，x=b先于a=1执行，y=a先于b=1执行。</p>
+<h2 id="volatile-禁止指令重排">volatile 禁止指令重排</h2>
+<p>如果我们将变量声明为 <code>volatile</code> ，在对这个变量进行读写操作的时候，会通过插入特定的 <strong>内存屏障</strong> 的方式来禁止指令重排序。</p>
+<blockquote>
+<p><strong>内存屏障</strong> 是一个CPU的指令，它可以保证特定操作的执行顺序。</p>
+</blockquote>
+<p><code>volatile</code>关键字确保了禁止特定类型的指令重排。在<code>volatile</code>变量的读操作和写操作周围，编译器和处理器会添加内存屏障（Memory Barrier），确保写操作不会被重排到读操作之前，也不会被重排到读操作之后。这意味着其他线程在读取<code>volatile</code>变量时，将看到写操作的结果，而不会看到它们之间的重排序。</p>
+<blockquote>
+<p><strong>单例模式</strong>：一种创建型设计模式，它确保<strong>一个类只有一个实例</strong>，并提供一个全局访问点以获取该实例。单例模式通常用于那些需要在应用程序中全局共享一个实例的情况，以确保该实例在整个应用程序生命周期内只被创建一次。</p>
+</blockquote>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 双重校验锁实现对象单例</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Singleton</span> {</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> Singleton uniqueInstance;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">Singleton</span><span class="params">()</span>{</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title function_">getUniqueInstance</span><span class="params">()</span>{</span><br><span class="line">        <span class="comment">// 判断是否已经实例化过，没有实例化过才进入加锁代码</span></span><br><span class="line">        <span class="keyword">if</span>(uniqueInstance == <span class="literal">null</span>){</span><br><span class="line">            <span class="comment">// 类对象加锁</span></span><br><span class="line">            <span class="keyword">synchronized</span> (Singleton.class){</span><br><span class="line">                <span class="keyword">if</span>(uniqueInstance == <span class="literal">null</span>){</span><br><span class="line">                    uniqueInstance = <span class="keyword">new</span> <span class="title class_">Singleton</span>();</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> uniqueInstance;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<p><code>uniqueInstance = new Singleton();</code> 这段代码其实是分为三步执行：</p>
+<ol>
+<li>为 <code>uniqueInstance</code> 分配内存空间</li>
+<li>初始化 <code>uniqueInstance</code></li>
+<li>将 <code>uniqueInstance</code> 指向分配的内存地址</li>
+</ol>
+<p>但是由于 JVM 具有指令重排的特性，执行顺序有可能变成 1-&gt;3-&gt;2。指令重排在单线程环境下不会出现问题，但是在多线程环境下会导致一个线程获得还没有初始化的实例。例如，线程 T1 执行了 1 和 3，此时 T2 调用 <code>getUniqueInstance</code>() 后发现 <code>uniqueInstance</code> 不为空，因此返回 <code>uniqueInstance</code>，但此时 <code>uniqueInstance</code> 还未被初始化。</p>
+<h2 id="volatile保证变量的可见性">volatile保证变量的可见性</h2>
+<p>设计如下的程序验证：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">VolatileVisibilityDemo</span> {</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="type">boolean</span> <span class="variable">flag</span> <span class="operator">=</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">toggleFlag</span><span class="params">()</span>{</span><br><span class="line">        <span class="comment">// 修改 flag 的值</span></span><br><span class="line">        flag = !flag;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isFlag</span><span class="params">()</span>{</span><br><span class="line">        <span class="comment">// 读取 flag</span></span><br><span class="line">        <span class="keyword">return</span> flag;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> {</span><br><span class="line">        <span class="type">VolatileVisibilityDemo</span> <span class="variable">example</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">VolatileVisibilityDemo</span>();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 线程 A：修改flag</span></span><br><span class="line">        <span class="type">Thread</span> <span class="variable">threadA</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; {</span><br><span class="line">            <span class="keyword">try</span> {</span><br><span class="line">                Thread.sleep(<span class="number">1000</span>); <span class="comment">// 让 B 线程有足够的时间启动</span></span><br><span class="line">            } <span class="keyword">catch</span> (InterruptedException e) {</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);</span><br><span class="line">            }</span><br><span class="line">            example.toggleFlag();</span><br><span class="line">            System.out.println(<span class="string">"Flag has been set to true"</span>);</span><br><span class="line">        });</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 线程 B：检查flag的值</span></span><br><span class="line">        <span class="type">Thread</span> <span class="variable">threadB</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; {</span><br><span class="line">            <span class="keyword">while</span> (!example.isFlag()){</span><br><span class="line">                <span class="comment">// 等待 flag 变成 true</span></span><br><span class="line">            }</span><br><span class="line">            System.out.println(<span class="string">"Flag is now true"</span>);</span><br><span class="line">        });</span><br><span class="line"></span><br><span class="line">        threadA.start();</span><br><span class="line">        threadB.start();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>在这个示例中，有两个线程，线程A负责修改<code>flag</code>的值为<code>true</code>，而线程B负责检查<code>flag</code>的值是否为<code>true</code>。由于<code>flag</code>被声明为<code>volatile</code>，线程B能够立即看到线程A对<code>flag</code>的修改，因此线程B将在<code>flag</code>变为<code>true</code>后输出相应的信息。</p>
+<p>如果将<code>flag</code>声明为非<code>volatile</code>的话，线程B可能会永远等待下去，因为不保证可见性，线程B无法及时获取到线程A对<code>flag</code>的修改。这就是<code>volatile</code>关键字的作用，确保变量的可见性，适用于需要跨线程通信的情况。</p>
+<h2 id="volatile不保证原子性">volatile不保证原子性</h2>
+<p><strong><code>volatile</code> 关键字能保证变量的可见性，但不能保证对变量的操作是原子性的。</strong></p>
+<blockquote>
+<p>原子性（Atomicity）是多线程编程中的一个重要概念，它指的是一个操作是不可分割的，要么全部执行，要么全部不执行。如果一个操作是原子性的，那么在多线程环境下，其他线程无法在执行该操作的过程中干扰或修改其状态，从而确保操作的一致性和完整性。</p>
+</blockquote>
+<p>验证示例代码：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 验证 volatile 不保证变量操作的原子性</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">VolatileAtomicityDemo</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">volatile</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">inc</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">increase</span><span class="params">()</span>{</span><br><span class="line">        inc++;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException{</span><br><span class="line">        <span class="type">int</span> <span class="variable">numThreads</span> <span class="operator">=</span> <span class="number">5</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">numIteration</span> <span class="operator">=</span> <span class="number">500</span>;</span><br><span class="line"></span><br><span class="line">        <span class="type">ExecutorService</span> <span class="variable">threadPool</span> <span class="operator">=</span> Executors.newFixedThreadPool(numThreads);</span><br><span class="line"></span><br><span class="line">        <span class="type">VolatileAtomicityDemo</span> <span class="variable">volatileAtomicityDemo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">VolatileAtomicityDemo</span>();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; numThreads; i++){</span><br><span class="line">            threadPool.execute(() -&gt; {</span><br><span class="line">                <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; numIteration; j++){</span><br><span class="line">                    volatileAtomicityDemo.increase();</span><br><span class="line">                }</span><br><span class="line">            });</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 等待 1.5 秒，保证上面的程序执行完成</span></span><br><span class="line">        Thread.sleep(<span class="number">15000</span>);</span><br><span class="line"></span><br><span class="line">        System.out.printf(<span class="string">"共有%d个线程，每个线程迭代%d次。本应增长%d次！\n"</span>,</span><br><span class="line">                numThreads, numIteration, numThreads * numIteration);</span><br><span class="line"></span><br><span class="line">        System.out.printf(<span class="string">"实际增长次数为：%d\n"</span>, inc);</span><br><span class="line"></span><br><span class="line">        threadPool.shutdown();</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<p>输出为：</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">共有5个线程，每个线程迭代500次。本应增长2500次！</span><br><span class="line">实际增长次数为：2417</span><br></pre></td></tr></tbody></table></figure>
+<p>正常情况下，运行上面的代码理应输出 <code>2500</code>。但真正运行了上面的代码之后，你会发现很多时候结果都小于 <code>2500</code>。</p>
+<p>也就说明，如果 <code>volatile</code> 能保证 <code>inc++</code> 操作的原子性的话。每个线程中对 <code>inc</code> 变量自增完之后，其他线程可以立即看到修改后的值。5 个线程分别进行了 500 次操作，那么最终 inc 的值应该是 5*500=2500。</p>
+<p>事实上，<code>inc++</code> 是一个复合操作，包括三步：</p>
+<ol>
+<li>读取 inc 的值。</li>
+<li>对 inc 加 1。</li>
+<li>将 inc 的值写回内存。</li>
+</ol>
+<p><code>volatile</code> 是无法保证这三个操作是具有原子性的，有可能导致下面这种情况出现：</p>
+<ol>
+<li>线程 1 对 <code>inc</code> 进行读取操作之后，还未对其进行修改。线程 2 又读取了 <code>inc</code>的值并对其进行修改（+1），再将<code>inc</code> 的值写回内存。</li>
+<li>线程 2 操作完毕后，线程 1 对 <code>inc</code>的值进行修改（+1），再将<code>inc</code> 的值写回内存。</li>
+</ol>
+<p>这也就导致两个线程分别对 <code>inc</code> 进行了一次自增操作后，<code>inc</code> 实际上只增加了 1。</p>
+<p>其实，如果想要保证上面的代码运行正确也非常简单，利用 <code>synchronized</code>、<code>Lock</code>或者<code>AtomicInteger</code>都可以。</p>
+<h1>synchronized</h1>
+<p><code>synchronized</code> 是 Java 中的一个关键字，中文意思为“同步”、“协调”，主要解决的是多个线程之间访问资源的<strong>同步性</strong>，可以保证被它修饰的方法或者代码块在任意时刻只能有一个线程执行。</p>
+<h2 id="具体使用场景">具体使用场景</h2>
+<h3 id="实例方法与静态方法">实例方法与静态方法</h3>
+<p>在Java中，方法可以分为两大类：实例方法和静态方法。这两种方法有不同的特点和用途。</p>
+<ol>
+<li>实例方法（Instance Method）：
+<ul>
+<li>实例方法是与对象实例相关联的方法。</li>
+<li>它可以访问和操作对象的实例变量（成员变量）。</li>
+<li>实例方法必须通过对象调用，因为它们依赖于对象的状态。</li>
+<li>通常用于封装对象的行为和操作。</li>
+</ul>
+</li>
+</ol>
+<p>例子：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Car</span> {</span><br><span class="line">    String model;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">start</span><span class="params">()</span> {</span><br><span class="line">        System.out.println(<span class="string">"Starting the "</span> + model + <span class="string">" car."</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> {</span><br><span class="line">        <span class="type">Car</span> <span class="variable">myCar</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Car</span>();</span><br><span class="line">        myCar.model = <span class="string">"Toyota"</span>;</span><br><span class="line">        myCar.start(); <span class="comment">// 调用实例方法</span></span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>在上面的示例中，<code>start</code> 是一个实例方法，它操作了 <code>Car</code> 类的实例变量 <code>model</code>，并且必须通过 <code>myCar</code> 实例调用。</p>
+<ol start="2">
+<li>
+<p>静态方法（Static Method）：</p>
+<ul>
+<li>
+<p>静态方法与类相关联，而不是与对象实例相关联。</p>
+</li>
+<li>
+<p>它不可以访问对象的实例变量，因为它与特定实例无关。</p>
+</li>
+<li>
+<p>静态方法可以直接通过类名调用，无需创建对象。</p>
+</li>
+<li>
+<p>通常用于执行与类相关的操作，不依赖于特定实例。</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>例子：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MathUtils</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> {</span><br><span class="line">        <span class="keyword">return</span> a + b;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> {</span><br><span class="line">        <span class="type">int</span> <span class="variable">result</span> <span class="operator">=</span> MathUtils.add(<span class="number">5</span>, <span class="number">3</span>); <span class="comment">// 调用静态方法</span></span><br><span class="line">        System.out.println(<span class="string">"Result: "</span> + result);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>在上面的示例中，<code>add</code> 是一个静态方法，它与特定的对象实例无关，可以直接通过类名 <code>MathUtils</code> 调用。</p>
+<p>实例方法与<strong>对象实例</strong>相关联，可以访问实例变量，静态方法与<strong>类</strong>相关联，不依赖于对象实例，不能访问实例变量。</p>
+<h3 id="synchronized修饰实例方法">synchronized修饰实例方法</h3>
+<p>给<strong>当前对象实例</strong>加锁，进入同步代码前要获得 <strong>当前对象实例的锁</strong> 。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">method</span><span class="params">()</span> {</span><br><span class="line">    ...</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="synchronized修饰静态方法">synchronized修饰静态方法</h3>
+<p>给<strong>当前类</strong>加锁，会作用于类的<strong>所有对象实例</strong> ，进入同步代码前要获得 <strong>当前 class 的锁</strong>。</p>
+<p>这是因为静态成员不属于任何一个实例对象，归整个类所有，不依赖于类的特定实例，被类的所有实例共享。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">synchronized</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">method</span><span class="params">()</span> {</span><br><span class="line">    ...</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="synchronized修饰代码块">synchronized修饰代码块</h3>
+<p>对括号里<strong>指定的对象/类</strong>加锁：</p>
+<ul>
+<li><code>synchronized(object)</code> 表示进入同步代码库前要获得 <strong>给定对象的锁</strong>。</li>
+<li><code>synchronized(类.class)</code> 表示进入同步代码前要获得 <strong>给定 Class 的锁</strong></li>
+</ul>
+<blockquote>
+<p><strong>构造方法不能使用 synchronized 关键字修饰。</strong> 因为构造方法本身就属于线程安全的，不存在同步的构造方法一说。</p>
+</blockquote>
+<h2 id="synchronized-保证操作的可见性">synchronized 保证操作的可见性</h2>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SynchronizedVisibilityDemo</span> {</span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span> <span class="variable">flag</span> <span class="operator">=</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">writeData</span><span class="params">()</span>{</span><br><span class="line">        flag = <span class="literal">true</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="type">boolean</span> <span class="title function_">readData</span><span class="params">()</span>{</span><br><span class="line">        <span class="keyword">return</span> flag;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> {</span><br><span class="line">        <span class="type">SynchronizedVisibilityDemo</span> <span class="variable">demo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SynchronizedVisibilityDemo</span>();</span><br><span class="line"></span><br><span class="line">        <span class="type">Thread</span> <span class="variable">writerThread</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; {</span><br><span class="line">            <span class="comment">// 保证让读线程先运行</span></span><br><span class="line">            <span class="keyword">try</span> {</span><br><span class="line">                Thread.sleep(<span class="number">1500</span>);</span><br><span class="line">            } <span class="keyword">catch</span> (InterruptedException e) {</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);</span><br><span class="line">            }</span><br><span class="line">            System.out.printf(<span class="string">"Data is %s, ready to write to %s.\n"</span>, demo.flag, !demo.flag);</span><br><span class="line">            demo.writeData();</span><br><span class="line">        });</span><br><span class="line"></span><br><span class="line">        <span class="type">Thread</span> <span class="variable">readerThread</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; {</span><br><span class="line">            <span class="keyword">while</span> (<span class="literal">true</span>){</span><br><span class="line">                <span class="comment">// 等待数据变为 true</span></span><br><span class="line">                <span class="keyword">if</span> (demo.readData()) <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">            }</span><br><span class="line">            System.out.println(<span class="string">"Data is true now!"</span>);</span><br><span class="line">        });</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        readerThread.start();</span><br><span class="line">        writerThread.start();</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<p>在这个示例中，假如不加 <code>synchronized</code> 关键字，写线程对 <code>flag</code> 的操作对于读线程来说是不可见的，读线程会一直等待下去。</p>
+<h2 id="synchronized-保证操作的原子性">synchronized 保证操作的原子性</h2>
+<p>与 <code>volatile</code> 的验证方法相似。不加 <code>synchronized</code> 修饰，结果可能为：</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">共有5个线程，每个线程迭代1000次。增长后 Counter 应为 5000！</span><br><span class="line">实际 Counter: 4395</span><br></pre></td></tr></tbody></table></figure>
+<p>测试代码：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SynchronizedAtomicityDemo</span> {</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="variable">counter</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">increase</span><span class="params">()</span>{</span><br><span class="line">        counter++;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getCounter</span><span class="params">()</span>{</span><br><span class="line">        <span class="keyword">return</span> counter;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException {</span><br><span class="line">        <span class="type">int</span> <span class="variable">numThreads</span> <span class="operator">=</span> <span class="number">5</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">numIteration</span> <span class="operator">=</span> <span class="number">1000</span>;</span><br><span class="line"></span><br><span class="line">        <span class="type">ExecutorService</span> <span class="variable">threadPool</span> <span class="operator">=</span> Executors.newFixedThreadPool(numThreads);</span><br><span class="line"></span><br><span class="line">        <span class="type">SynchronizedAtomicityDemo</span> <span class="variable">demo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SynchronizedAtomicityDemo</span>();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; numThreads; i++) {</span><br><span class="line">            threadPool.execute(() -&gt; {</span><br><span class="line">                <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; numIteration; j++) {</span><br><span class="line">                    demo.increase();</span><br><span class="line">                }</span><br><span class="line">            });</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 关闭线程池并等待所有任务完成</span></span><br><span class="line">        threadPool.shutdown();</span><br><span class="line"></span><br><span class="line">        <span class="type">boolean</span> <span class="variable">termination</span> <span class="operator">=</span> threadPool.awaitTermination(<span class="number">1</span>, TimeUnit.MINUTES);</span><br><span class="line"></span><br><span class="line">        System.out.printf(<span class="string">"共有%d个线程，每个线程迭代%d次。增长后 Counter 应为 %d！\n"</span>,</span><br><span class="line">                numThreads, numIteration, numThreads * numIteration);</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"实际 Counter: "</span> + demo.getCounter());</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="synchronized-底层原理">synchronized 底层原理</h2>
+<h3 id="对于修饰代码块的情况">对于修饰代码块的情况</h3>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SynchronizedCodeBlockDemo</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">method</span><span class="params">()</span>{</span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="built_in">this</span>){</span><br><span class="line">            System.out.println(<span class="string">"Synchronized 代码块"</span>);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> {</span><br><span class="line">        <span class="type">SynchronizedCodeBlockDemo</span> <span class="variable">demo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SynchronizedCodeBlockDemo</span>();</span><br><span class="line">        demo.method();</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<p>将代码使用<code>javac</code>编译，之后再执行<code>javap -c -s -v -l SynchronizedCodeBlockDemo.class</code> 命令后，可以看到 <code>method</code> 方法反编译的结果：</p>
+<p><img src="https://typora-1308640872.cos.ap-beijing.myqcloud.com/img/image-20231027134827905.png" alt="image-20231027134827905"></p>
+<p><strong>解读</strong>：</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">public void method();：这是方法的定义，名称为method，没有参数，返回类型为void，并且被声明为public。</span><br><span class="line"></span><br><span class="line">descriptor: ()V：这部分描述了方法的描述符。()表示方法没有参数，V表示返回类型为void。</span><br><span class="line"></span><br><span class="line">flags: (0x0001) ACC_PUBLIC：这是方法的修饰符，表示这个方法是public的。</span><br><span class="line"></span><br><span class="line">Code:：以下是方法的字节码指令。</span><br><span class="line"></span><br><span class="line">stack=2, locals=3, args_size=1：这是方法执行时的堆栈深度、本地变量数和参数数量的信息。</span><br><span class="line"></span><br><span class="line">0: aload_0：加载对象引用到操作数栈上。</span><br><span class="line"></span><br><span class="line">1: dup：复制栈顶的值并将副本压入栈。</span><br><span class="line"></span><br><span class="line">2: astore_1：将栈顶的值存储到局部变量1中。</span><br><span class="line"></span><br><span class="line">3: monitorenter：进入对象监视器（锁定对象），用于同步块的开始。</span><br><span class="line"></span><br><span class="line">4: getstatic #7：从静态字段#7（可能是java/lang/System.out的字段）获取一个值。</span><br><span class="line"></span><br><span class="line">7: ldc #13：将常量#13（可能是字符串常量"Synchronized 代码块"）加载到操作数栈上。</span><br><span class="line"></span><br><span class="line">9: invokevirtual #15：调用虚拟方法#15（可能是java/io/PrintStream.println）。</span><br><span class="line"></span><br><span class="line">12: aload_1：将局部变量1加载到栈上。</span><br><span class="line"></span><br><span class="line">13: monitorexit：退出对象监视器，用于同步块的结束。</span><br><span class="line"></span><br><span class="line">14: goto 22：跳转到第22条指令。</span><br><span class="line"></span><br><span class="line">17: astore_2：将栈顶的异常对象存储到局部变量2中。</span><br><span class="line"></span><br><span class="line">18: aload_1：将局部变量1加载到栈上。</span><br><span class="line"></span><br><span class="line">19: monitorexit：再次尝试退出对象监视器，用于异常处理。</span><br><span class="line"></span><br><span class="line">20: aload_2：将异常对象加载到栈上。</span><br><span class="line"></span><br><span class="line">21: athrow：抛出异常。</span><br><span class="line"></span><br><span class="line">22: return：返回指令，方法执行结束。</span><br><span class="line"></span><br><span class="line">Exception table:：这是异常处理表，描述了哪些异常在哪些范围内被处理。</span><br><span class="line"></span><br><span class="line">LineNumberTable:：这是行号表，指明了字节码指令和源代码之间的对应关系。</span><br><span class="line"></span><br><span class="line">LocalVariableTable:：这是本地变量表，列出了本地变量的信息。</span><br></pre></td></tr></tbody></table></figure>
+<p>需要注意 <code>Code</code> 部分的第3、13、19，这表明 <code>synchronized</code>  同步语句块的实现使用的是 <code>monitorenter</code> 和 <code>monitorexit</code> 指令，其中 <code>monitorenter</code> 指令指向同步代码块的开始位置，<code>monitorexit</code> 指令则指明同步代码块的结束位置。</p>
+<p>上面的字节码中包含一个 <code>monitorenter</code> 指令以及两个 <code>monitorexit</code> 指令，这是为了保证锁在同步代码块代码正常执行以及出现异常的这两种情况下都能被正确释放</p>
+<h3 id="对于修饰方法的情况">对于修饰方法的情况</h3>
+<p>同样的方式操作以下代码：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SynchronizedMethodDemo</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">method</span><span class="params">()</span>{</span><br><span class="line">        System.out.println(<span class="string">"Synchronized 方法"</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> {</span><br><span class="line">        <span class="type">SynchronizedMethodDemo</span> <span class="variable">demo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SynchronizedMethodDemo</span>();</span><br><span class="line">        demo.method();</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<p><img src="https://typora-1308640872.cos.ap-beijing.myqcloud.com/img/image-20231027135643151.png" alt="image-20231027135643151"></p>
+<p>与修饰代码块相对比， <code>synchronized</code> 修饰的方法并没有 <code>monitorenter</code> 指令和 <code>monitorexit</code> 指令，取得代之的确实是 <code>ACC_SYNCHRONIZED</code> 标识，该标识指明了该方法是一个同步方法。JVM 通过该 <code>ACC_SYNCHRONIZED</code> 访问标志来辨别一个方法是否声明为同步方法，从而执行相应的同步调用。</p>
+<p>如果是实例方法，JVM 会尝试获取实例对象的锁。如果是静态方法，JVM 会尝试获取当前 class 的锁</p>
+<blockquote>
+<p><code>flags: (0x0021) ACC_PUBLIC, ACC_SYNCHRONIZED</code>：这是方法的修饰符，表示这个方法是<code>public</code>的，并且使用了<code>synchronized</code>修饰符。</p>
+</blockquote>
+<p><strong><code>volatile</code> 与 <code>synchronized</code> 的本质都是对对象监视器 monitor 的获取。</strong></p>
+<h1>synchronized 和 volatile 的区别</h1>
+<ul>
+<li><code>volatile</code> 关键字是线程同步的轻量级实现，所以 <code>volatile</code>性能肯定比<code>synchronized</code>关键字要好 。但是 <code>volatile</code> 关键字只能用于变量而 <code>synchronized</code> 关键字可以修饰方法以及代码块 。</li>
+<li><code>volatile</code> 关键字能保证数据的可见性，但不能保证数据的原子性。<code>synchronized</code> 关键字两者都能保证。</li>
+<li><code>volatile</code>关键字主要用于解决变量在多个线程之间的可见性，而 <code>synchronized</code> 关键字解决的是多个线程之间访问资源的同步性。</li>
+</ul>
+
+      
+    </div>
+    <div class="article-footer">
+      
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/LiangshouX" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/LiangshouX" target="_blank"><span class="text-dark">Liangshou</span><small class="ml-1x">软件 &amp; IT</small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2023/10/25/2023-10-25-%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0/" title="LC热题100-前缀和+哈希表"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2023/10/24/2023-10-24-%E5%88%B7%E9%A2%98%E7%AC%94%E8%AE%B0/" title="LC热题100-无重复字符的最长子串"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn " data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">    <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/LiangshouX" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/xiaoliangshou.bit@gmail.com" target="_blank" title="Email" data-toggle=tooltip data-placement=top><i class="icon icon-email"></i></a></li>
+        
+        <li><a href="https://juejin.cn/user/3664001491278077" target="_blank" title="Juejin" data-toggle=tooltip data-placement=top><i class="icon icon-juejin"></i></a></li>
+        
+        <li><a href="https://www.zhihu.com/people/grillo-72" target="_blank" title="Zhihu" data-toggle=tooltip data-placement=top><i class="icon icon-zhihu"></i></a></li>
+        
+    </ul>
+
+    
+        <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+        <script>
+          if (window.mermaid) {
+            mermaid.initialize({theme: 'forest'});
+          }
+        </script>
+    
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/LiangshouX" target="_blank"> Liangshou </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
